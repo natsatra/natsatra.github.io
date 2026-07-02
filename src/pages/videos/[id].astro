@@ -1,0 +1,52 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import VideoPreview from '../../components/VideoPreview.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { sortItemsByDateDesc } from '../../utils/data-utils';
+
+export async function getStaticPaths() {
+    const videos = (await getCollection('videos')).sort(sortItemsByDateDesc);
+    const videoCount = videos.length;
+    return videos.map((video, index) => ({
+        params: { id: video.id },
+        props: {
+            video,
+            prevVideo: index + 1 !== videoCount ? videos[index + 1] : null,
+            nextVideo: index !== 0 ? videos[index - 1] : null
+        }
+    }));
+}
+
+type Props = {
+    video: CollectionEntry<'videos'>;
+    prevVideo: CollectionEntry<'videos'>;
+    nextVideo: CollectionEntry<'videos'>;
+};
+
+const { video, prevVideo, nextVideo } = Astro.props;
+const { title, description, seo } = video.data;
+const { Content } = await render(video);
+---
+
+<BaseLayout title={seo?.title ?? title} description={seo?.description ?? description} image={seo?.image} pageType="article" showHeader={false}>
+<a href="/videos" class="inline-flex items-center gap-1 text-sm hover:underline mb-8 block">
+    ← Back to Videos
+</a>
+    <article class="mb-16 sm:mb-24">
+        <header class="mb-8">
+            <h1 class="font-serif text-3xl leading-tight font-medium sm:text-5xl sm:leading-tight">{title}</h1>
+        </header>
+        <div class="prose sm:prose-lg max-w-none">
+            <Content />
+        </div>
+    </article>
+    {
+        (prevVideo || nextVideo) && (
+            <div class="my-16 sm:my-24">
+                <h2 class="mb-12 font-serif text-xl italic sm:mb-16 sm:text-2xl">View Next</h2>
+                {nextVideo && <VideoPreview project={nextVideo} class="mb-10 sm:mb-12" headingLevel="h3" />}
+                {prevVideo && <VideoPreview project={prevVideo} class="mb-10 sm:mb-12" headingLevel="h3" />}
+            </div>
+        )
+    }
+</BaseLayout>

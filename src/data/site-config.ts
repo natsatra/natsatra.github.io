@@ -1,15 +1,16 @@
-import avatar from '../assets/images/avatar.jpg';
-import hero from '../assets/images/hero.jpg';
+import avatar from '../assets/images/round.jpg';
+import linkedinIcon from '../assets/images/linkedin.png';
 import type { SiteConfig } from '../types';
 
 const siteConfig: SiteConfig = {
-    website: 'https://example.com',
+    website: 'https://natsatra.github.io/portfolio',
     avatar: {
         src: avatar,
-        alt: 'Ethan Donovan'
+        alt: 'Mathangi'
     },
-    title: 'Dante',
-    subtitle: 'Minimal Astro.js theme',
+    title: 'Mathangi | Technical Writer Portfolio',
+    headerTitle: 'Mathangi S.',
+    subtitle: 'Technical writer | User advocate | Developer docs | UX writing',
     description: 'Astro.js and Tailwind CSS theme for blog and portfolio by justgoodui.com',
     image: {
         src: '/dante-preview.jpg',
@@ -21,74 +22,58 @@ const siteConfig: SiteConfig = {
             href: '/'
         },
         {
-            text: 'Projects',
-            href: '/projects'
-        },
-        {
-            text: 'Blog',
-            href: '/blog'
-        },
-        {
-            text: 'Tags',
-            href: '/tags'
-        }
-    ],
-    footerNavLinks: [
-        {
             text: 'About',
             href: '/about'
         },
         {
-            text: 'Contact',
-            href: '/contact'
+            text: 'Writing',
+            href: '/writing'
         },
         {
-            text: 'Terms',
-            href: '/terms'
+            text: 'Projects',
+            href: '/projects'
         },
         {
-            text: 'Download theme',
-            href: 'https://github.com/JustGoodUI/dante-astro-theme'
-        }
+            text: 'Videos',
+            href: '/videos'
+        },
+        /*{
+            text: 'Certifications',
+            href: '/certifications'
+        },
+        {
+            text: 'Blog',
+            href: '/blog'
+        },*/
+       
     ],
+    
     socialLinks: [
         {
-            text: 'Dribbble',
-            href: 'https://dribbble.com/'
+            text: 'Linkedin',
+            href: 'https://www.linkedin.com/in/mathangikcs',
+            icon: linkedinIcon
         },
         {
-            text: 'Instagram',
-            href: 'https://instagram.com/'
-        },
-        {
-            text: 'X/Twitter',
-            href: 'https://twitter.com/'
+            text: 'GitHub',
+            href: 'https://github.com/natsatra',
+            icon: '/github.png'
         }
     ],
     hero: {
-        title: 'Hi There & Welcome to My Corner of the Web!',
-        text: "I'm **Ethan Donovan**, a web developer at Amazing Studio, dedicated to the realms of collaboration and artificial intelligence.\nMy approach involves embracing intuition, conducting just enough research, and leveraging aesthetics as a catalyst for exceptional products.\nI have a profound appreciation for top-notch software, visual design, and the principles of product-led growth.\n\nFeel free to explore some of my coding endeavors on [GitHub](https://github.com/JustGoodUI/dante-astro-theme) or follow me on [Twitter/X](https://twitter.com/justgoodui).",
-        image: {
-            src: hero,
-            alt: 'A person sitting at a desk in front of a computer'
-        },
+        title: 'Hi there & welcome to my portfolio!',
+        text: "I'm **Mathangi**, a senior technical writer. I treat every feature I document as a user would: testing behavior, surfacing edge cases, and documenting failure states as thoroughly as happy paths. Eight years across enterprise security products and SaaS taught me the difference between documentation that exists and documentation that works.\n\nI'm also a python enthusiast who loves to dabble in coding projects! Check out my [GitHub](https://github.com/natsatra).",
         actions: [
             {
-                text: 'Get in Touch',
-                href: '/contact'
+                text: 'Get in touch',
+                href: '/about#get-in-touch'
             }
         ]
     },
-    subscribe: {
-        enabled: true,
-        title: 'Subscribe to Dante Newsletter',
-        text: 'One update per week. All the latest posts directly in your inbox.',
-        form: {
-            action: '#'
-        }
-    },
     postsPerPage: 8,
-    projectsPerPage: 8
+    projectsPerPage: 8,
+    writingPerPage: 8,
+    certificationsPerPage: 8
 };
 
 export default siteConfig;

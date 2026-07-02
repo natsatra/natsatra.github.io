@@ -1,0 +1,27 @@
+---
+import type { GetStaticPathsOptions, Page } from 'astro';
+import { type CollectionEntry, getCollection } from 'astro:content';
+import CertificationPreview from '../../components/CertificationPreview.astro';
+import Pagination from '../../components/Pagination.astro';
+import siteConfig from '../../data/site-config';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { sortItemsByDateDesc } from '../../utils/data-utils';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+    const certifications = (await getCollection('certifications')).sort(sortItemsByDateDesc);
+    return paginate(certifications, { pageSize: siteConfig.certificationsPerPage || 6 });
+}
+
+type Props = { page: Page<CollectionEntry<'certifications'>> };
+
+const { page } = Astro.props;
+const certifications = page.data;
+---
+
+<BaseLayout title="Certifications" description="Certifications and credentials I've earned" showHeader={false}>
+    <h1 class="mb-12 font-serif text-2xl leading-tight italic sm:mb-16 sm:text-4xl">Certifications</h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {certifications.map((certification) => <CertificationPreview certification={certification} />)}
+    </div>
+    <Pagination page={page} class="my-16 sm:my-24" />
+</BaseLayout>

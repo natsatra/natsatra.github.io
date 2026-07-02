@@ -1,0 +1,27 @@
+---
+import type { GetStaticPathsOptions, Page } from 'astro';
+import { type CollectionEntry, getCollection } from 'astro:content';
+import Pagination from '../../components/Pagination.astro';
+import VideoPreview from '../../components/VideoPreview.astro';
+import siteConfig from '../../data/site-config';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { sortItemsByDateDesc } from '../../utils/data-utils';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+    const videos = (await getCollection('videos')).sort(sortItemsByDateDesc);
+    return paginate(videos, { pageSize: siteConfig.projectsPerPage || 6 });
+}
+
+type Props = { page: Page<CollectionEntry<'videos'>> };
+
+const { page } = Astro.props;
+const videoList = page.data;
+---
+
+<BaseLayout title="Videos" description="Video walkthroughs and tutorials" showHeader={false}>
+    <h1 class="mb-12 font-serif text-2xl leading-tight italic sm:mb-16 sm:text-4xl">Videos</h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+    {videoList.map((video) => <VideoPreview project={video} />)}
+</div>
+    <Pagination page={page} class="my-16 sm:my-24" />
+</BaseLayout>

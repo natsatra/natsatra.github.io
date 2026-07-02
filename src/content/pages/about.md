@@ -2,42 +2,68 @@
 title: About
 seo:
   title: About Me
-  description: Learn more about the person behind the website and embark on a journey of inspiration and shared experiences.
-  image:
-    src: '../../assets/images/about.jpg'
-    alt: A person sitting at a desk in front of a computer
+  description: Mathangi's technical writing portfolio About page.
 ---
 
-![Alt text for image](../../assets/images/about.jpg)
 
-**Note!:** This about page is entirely fictional and created for the purpose of showcasing [Dante Astro.js theme functionality](https://justgoodui.com/astro-themes/dante/).
+## Hi, I'm Mathangi 👋
 
-## Ethan Donovan - Web Developer based in Estonia
+### What I do
 
-**Greetings!** I'm Ethan Donovan, a passionate web developer residing in the picturesque landscapes of [Estonia](https://en.wikipedia.org/wiki/Estonia). With a keen eye for design and a love for crafting seamless digital experiences, I bring a unique blend of creativity and technical expertise to the world of web development.
 
-## Skills and Expertise
+I’m a senior technical writer specializing in enterprise security infrastructure, identity management, and developer-facing B2B SaaS platforms. My background is built on architecting documentation for complex perimeters (IAM, PAM, OAuth, SAML), REST API references, SDK guides, and instruction frameworks for agentic AI features.
 
-I specialize in front-end and back-end development, utilizing the latest technologies to build responsive and user-friendly websites. My proficiency includes **HTML**, **CSS**, **JavaScript**, and frameworks such as **Astro.js** for dynamic and interactive user interfaces. On the server side, I'm well-versed in Node.js and have experience with database management systems like MongoDB.
+I specialize in translating high-complexity backend architecture into intuitive, production-grade content. Whether restructuring legacy enterprise docs to lift AI chatbot deflection to 72% or mapping out intricate administrative workflows, I advocate for the user by ensuring the documentation is as secure and robust as the product itself.
 
-## Innovation and Problem-Solving
+---
 
-I thrive on solving complex problems and transforming ideas into functional, elegant websites. Whether it's optimizing performance, implementing new features, or troubleshooting issues, I approach each challenge with enthusiasm and a commitment to delivering high-quality solutions.
+### Who I am
 
-## Global Perspective, Local Impact
+I’m a technical writer with a background in Computer Science; my combined interest in structure and technology naturally drew me toward information architecture. To write about a platform, I analyze the systems first—how the pieces connect, where dependencies break, and what a user actually needs to know versus what is just noise. That perspective shapes my approach to content: structure before sentences, architecture before pages.
 
-Living in Estonia has not only influenced my appreciation for nature and culture but has also shaped my approach to web development. I understand the importance of creating digital solutions that resonate with local audiences while maintaining a global perspective.
+I’m also driven by continuous, practical learning. Even though standard workflows are heavily AI-assisted now, I believe in understanding backend machinery from the ground up. To stretch my technical boundaries, I’m currently learning Python and PostgreSQL from scratch.
 
-## Continuous Learning
+I am drawn to databases and system design because they help me deeply understand the data logic under the hood, ensuring I can read scripts, talk to engineering, and interpret architectures accurately.  
 
-The dynamic nature of the tech industry inspires me to stay up-to-date with the latest trends and advancements. I'm always eager to expand my skill set and embrace emerging technologies that enhance the functionality and aesthetics of the websites I create.
+---
 
-## Collaboration and Communication
+### What's here
 
-I believe in the power of collaboration and effective communication. Whether working with clients, designers, or fellow developers, I value clear communication to ensure the success of every project.
+#### 🗂️ Portfolio site
 
-## Get in Touch
+My writing portfolio, built with [Astro](https://astro.build) as a docs-as-code demonstration — content in Markdown, version-controlled, deployed like software. I'm working on the final touches — come back later and there'll be more.
 
-Are you looking to elevate your online presence or bring your digital ideas to life? I'd love to hear from you! Feel free to reach out for collaboration, consultation, or just a friendly chat about all things web development.
+#### 📝 My projects 
 
-_Let's build something amazing together!_
+Currently, I have [two personal projects](https://github.com/natsatra?tab=repositories) I built with Claude Code — I'm learning how to work with AI tooling hands-on, not just write about it. More coming as I get further into Python.
+
+---
+
+### Skills
+
+
+### Domain knowledge
+
+Identity and Access Management (IAM) · Privileged Access Management (PAM) · Privileged Session Management (PSM) · SAML 2.0 · OAuth · RBAC integrations · Enterprise security architecture · SIEM integrations · Compliance frameworks (PCI DSS, ISO 27001) · LLM documentation workflows · AI-assisted content authoring
+
+
+### Documentation & methodologies
+
+API & SDK documentation · CLI & developer tools documentation · Docs-as-code · Release notes · Topic-based/modular content structuring (DITA) · UX copy & error messaging · Style guide development · Agile sprint workflows
+
+### Tools & technologies
+
+![Markdown](https://img.shields.io/badge/Markdown-000000?style=flat-square&logo=markdown&logoColor=white) ![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white) ![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?style=flat-square&logo=visualstudiocode&logoColor=white) ![OpenAPI](https://img.shields.io/badge/OpenAPI-6BA539?style=flat-square&logo=openapiinitiative&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=flat-square&logo=postman&logoColor=white) ![Jira](https://img.shields.io/badge/Jira-0052CC?style=flat-square&logo=jira&logoColor=white) ![Confluence](https://img.shields.io/badge/Confluence-172B4D?style=flat-square&logo=confluence&logoColor=white) ![HTML](https://img.shields.io/badge/HTML-E34F26?style=flat-square&logo=html5&logoColor=white) ![CSS](https://img.shields.io/badge/CSS-1572B6?style=flat-square&logo=css3&logoColor=white)
+
+_Learning:_
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+
+*Video & media:*
+Remotion · iMovie · ScreenStudio · HeyGen · ElevenLabs
+
+---
+### Get in touch
+
+Get in touch with me via email [mathangikcs@gmail.com](mailto:mathangikcs@gmail.com) or on LinkedIn --> <a href="https://linkedin.com/in/mathangikcs"><img src="/linkedin.png" width="24" height="24" alt="LinkedIn" style="display:inline;vertical-align:middle;" /></a>
+
+_Thanks for stopping by!_

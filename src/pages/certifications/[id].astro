@@ -1,0 +1,60 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import CertificationPreview from '../../components/CertificationPreview.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { sortItemsByDateDesc } from '../../utils/data-utils';
+
+export async function getStaticPaths() {
+    const certifications = (await getCollection('certifications')).sort(sortItemsByDateDesc);
+    const certificationCount = certifications.length;
+    return certifications.map((certification, index) => ({
+        params: { id: certification.id },
+        props: {
+            certification,
+            prevCertification: index + 1 !== certificationCount ? certifications[index + 1] : null,
+            nextCertification: index !== 0 ? certifications[index - 1] : null
+        }
+    }));
+}
+
+type Props = {
+    certification: CollectionEntry<'certifications'>;
+    prevCertification: CollectionEntry<'certifications'>;
+    nextCertification: CollectionEntry<'certifications'>;
+};
+
+const { certification, prevCertification, nextCertification } = Astro.props;
+const { title, issuer, description, credentialUrl, seo } = certification.data;
+const { Content } = await render(certification);
+---
+
+<BaseLayout title={seo?.title ?? title} description={seo?.description ?? description} image={seo?.image} pageType="article" showHeader={false}>
+    <a href="/certifications" class="inline-flex items-center gap-1 text-sm hover:underline mb-8 block">
+        ← Back to Certifications
+    </a>
+    <article class="mb-16 sm:mb-24">
+        <header class="mb-8">
+            <h1 class="font-serif text-3xl leading-tight font-medium sm:text-5xl sm:leading-tight">{title}</h1>
+            {issuer && <p class="mt-2 text-sm opacity-70">{issuer}</p>}
+        </header>
+        <div class="prose sm:prose-lg max-w-none">
+            <Content />
+        </div>
+        {
+            credentialUrl && (
+                <a class="mt-8 inline-flex items-center gap-1 text-sm hover:underline" href={credentialUrl} target="_blank" rel="noopener noreferrer">
+                    View credential →
+                </a>
+            )
+        }
+    </article>
+    {
+        (prevCertification || nextCertification) && (
+            <div class="my-16 sm:my-24">
+                <h2 class="mb-12 font-serif text-xl italic sm:mb-16 sm:text-2xl">View Next</h2>
+                {nextCertification && <CertificationPreview certification={nextCertification} class="mb-10 sm:mb-12" headingLevel="h3" />}
+                {prevCertification && <CertificationPreview certification={prevCertification} class="mb-10 sm:mb-12" headingLevel="h3" />}
+            </div>
+        )
+    }
+</BaseLayout>

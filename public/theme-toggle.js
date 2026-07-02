@@ -12,7 +12,9 @@
     function storeTheme(theme) {
         try {
             localStorage.setItem('theme', theme);
-        } catch {}
+        } catch {
+            // localStorage unavailable (e.g. private browsing) — theme just won't persist
+        }
     }
 
     function getSystemTheme() {

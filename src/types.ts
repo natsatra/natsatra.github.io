@@ -9,6 +9,10 @@ export type Link = {
     href: string;
 };
 
+export type SocialLink = Link & {
+    icon?: ImageMetadata | string;
+};
+
 export type Hero = {
     title?: string;
     text?: string;
@@ -16,32 +20,20 @@ export type Hero = {
     actions?: Link[];
 };
 
-export type SubscribeForm = {
-    action: string;
-    emailFieldName?: string;
-    hiddenFields?: { name: string; value: string }[];
-    honeypotFieldName?: string;
-};
-
-export type Subscribe = {
-    enabled?: boolean;
-    title?: string;
-    text?: string;
-    form?: SubscribeForm;
-};
-
 export type SiteConfig = {
     website: string;
     avatar?: ImageInput;
     title: string;
+    headerTitle?: string;
     subtitle?: string;
     description: string;
     image?: ImageInput;
     headerNavLinks?: Link[];
     footerNavLinks?: Link[];
-    socialLinks?: Link[];
+    socialLinks?: SocialLink[];
     hero?: Hero;
-    subscribe?: Subscribe;
     postsPerPage?: number;
     projectsPerPage?: number;
+    writingPerPage?: number;
+    certificationsPerPage?: number;
 };

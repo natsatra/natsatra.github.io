@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import siteConfig from '../data/site-config';
 
 const socialLinks = siteConfig.socialLinks ?? [];
@@ -29,11 +30,16 @@ const currentYear = new Date().getFullYear();
                 <div class="flex flex-wrap gap-x-4 gap-y-1">
                     {socialLinks.map((link) => (
                         <a
-                            class="inline-flex items-center justify-center text-sm hover:underline hover:underline-offset-2"
+                            class="inline-flex items-center gap-1.5 text-sm hover:underline hover:underline-offset-2"
                             href={link.href}
                             target="_blank"
                             rel="noopener noreferer"
                         >
+                            {link.icon && typeof link.icon === 'string' ? (
+                                <img src={link.icon} alt="" width={18} height={18} />
+                            ) : (
+                                link.icon && <Image src={link.icon} alt="" width={18} height={18} />
+                            )}
                             {link.text}
                         </a>
                     ))}
@@ -42,7 +48,7 @@ const currentYear = new Date().getFullYear();
         }
         <p class="text-sm">
             &copy; {currentYear}
-            <a class="hover:underline hover:underline-offset-2" href="/">{siteConfig.title}</a>. All rights reserved.
+           <a class="hover:underline hover:underline-offset-2" href="/">{siteConfig.headerTitle}</a>
         </p>
     </div>
 </footer>

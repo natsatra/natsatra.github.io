@@ -46,8 +46,54 @@ const projects = defineCollection({
             description: z.string().optional(),
             publishDate: z.coerce.date(),
             isFeatured: z.boolean().default(false),
+            type: z.enum(['project', 'video']).default('project'),
+            repoUrl: z.string().url().optional(),
+            videoUrl: z.string().url().optional(),
+            tags: z.array(z.string()).default([]),
+            seo: seoSchema(image).optional()
+        })
+});
+const videos = defineCollection({
+    loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/videos' }),
+    schema: ({ image }) =>
+        z.object({
+            title: z.string(),
+            description: z.string().optional(),
+            publishDate: z.coerce.date(),
+            isFeatured: z.boolean().default(false),
+            videoUrl: z.string().url().optional(),
+            tags: z.array(z.string()).default([]),
             seo: seoSchema(image).optional()
         })
 });
 
-export const collections = { blog, pages, projects };
+const writing = defineCollection({
+    loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/writing' }),
+    schema: ({ image }) =>
+        z.object({
+            title: z.string(),
+            excerpt: z.string().optional(),
+            publishDate: z.coerce.date(),
+            updatedDate: z.coerce.date().optional(),
+            isFeatured: z.boolean().default(false),
+            tags: z.array(z.string()).default([]),
+            seo: seoSchema(image).optional()
+        })
+});
+
+const certifications = defineCollection({
+    loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/certifications' }),
+    schema: ({ image }) =>
+        z.object({
+            title: z.string(),
+            issuer: z.string().optional(),
+            description: z.string().optional(),
+            publishDate: z.coerce.date(),
+            isFeatured: z.boolean().default(false),
+            credentialUrl: z.string().url().optional(),
+            tags: z.array(z.string()).default([]),
+            seo: seoSchema(image).optional()
+        })
+});
+
+export const collections = { blog, pages, projects, videos, writing, certifications };

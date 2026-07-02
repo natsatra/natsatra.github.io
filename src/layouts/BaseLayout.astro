@@ -1,4 +1,5 @@
 ---
+import { GoogleAnalytics } from 'astro-google-analytics';
 import { ClientRouter } from 'astro:transitions';
 import BaseHead, { type Props as HeadProps } from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
@@ -14,16 +15,37 @@ const { showHeader = true, ...head } = Astro.props;
 <html lang="en" class="wrap-break-words antialiased">
     <head>
         <BaseHead {...head} />
-        <script>
-            if (localStorage.theme === 'dark') {
-                document.documentElement.classList.add('dark');
-            }
-        </script>
-        <ClientRouter />
-        <script is:inline src="/theme-toggle.js"></script>
+        <script is:inline>
+    document.documentElement.classList.add('dark');
+    document.documentElement.style.background = '#0a0a14';
+    document.documentElement.style.backgroundImage = 'radial-gradient(ellipse at 50% 40%, #1a2a4a 0%, #0d1220 40%, #0a0a14 70%)';
+    function applyBackground() {
+        if (document.body) {
+            document.body.style.background = '#0a0a14';
+            document.body.style.backgroundImage = 'radial-gradient(ellipse at 50% 40%, #1a2a4a 0%, #0d1220 40%, #0a0a14 70%)';
+        }
+    }
+    document.addEventListener('DOMContentLoaded', applyBackground);
+    document.addEventListener('astro:before-swap', () => {
+        document.documentElement.classList.add('dark');
+        document.documentElement.style.background = '#0a0a14';
+        document.documentElement.style.backgroundImage = 'radial-gradient(ellipse at 50% 40%, #1a2a4a 0%, #0d1220 40%, #0a0a14 70%)';
+    });
+    document.addEventListener('astro:after-swap', () => {
+        document.documentElement.classList.add('dark');
+        applyBackground();
+    });
+</script>
+<ClientRouter />
+<GoogleAnalytics id="G-FB6207101F" />
     </head>
-    <body class="bg-main text-main">
-        <div class="flex min-h-screen flex-col px-4 md:px-8">
+    <body class="text-main" style="min-height: 100vh;">
+        <div
+            class="pointer-events-none fixed inset-0 z-0 bg-repeat opacity-10"
+            style="background-image: url('/texture.svg');"
+        >
+        </div>
+        <div class="relative z-10 flex min-h-screen flex-col px-4 md:px-8">
             <Nav />
             {showHeader && <Header />}
             <main class="mx-auto w-full max-w-3xl grow">

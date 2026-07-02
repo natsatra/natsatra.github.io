@@ -6,6 +6,10 @@ dist/
 # dependencies
 node_modules/
 
+# Vale style packages (fetched via `vale sync`); keep styles/config/vocabularies (hand-authored)
+/styles/*
+!/styles/config/
+
 # logs
 npm-debug.log*
 yarn-debug.log*

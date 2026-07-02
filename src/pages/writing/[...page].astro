@@ -1,0 +1,25 @@
+---
+import type { GetStaticPathsOptions, Page } from 'astro';
+import { type CollectionEntry, getCollection } from 'astro:content';
+import Pagination from '../../components/Pagination.astro';
+import WritingPreview from '../../components/WritingPreview.astro';
+import siteConfig from '../../data/site-config';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { sortItemsByDateDesc } from '../../utils/data-utils';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+    const posts = (await getCollection('writing')).sort(sortItemsByDateDesc);
+    return paginate(posts, { pageSize: siteConfig.writingPerPage || 4 });
+}
+
+type Props = { page: Page<CollectionEntry<'writing'>> };
+
+const { page } = Astro.props;
+const writing = page.data;
+---
+
+<BaseLayout title="Writing" description="A collection of technical writing, articles, and documentation samples" showHeader={false}>
+    <h1 class="mb-12 font-serif text-2xl leading-tight italic sm:mb-16 sm:text-4xl">Writing</h1>
+    {writing.map((post) => <WritingPreview post={post} class="mb-10 sm:mb-12" />)}
+    <Pagination page={page} class="my-16 sm:my-24" />
+</BaseLayout>

@@ -1,0 +1,26 @@
+---
+import { type CollectionEntry } from 'astro:content';
+
+type Props = { certification: CollectionEntry<'certifications'>; class?: string; headingLevel?: 'h2' | 'h3' };
+
+const { certification, class: className, headingLevel = 'h2' } = Astro.props;
+const { title, issuer, description, tags } = certification.data;
+const TitleTag = headingLevel;
+---
+
+<a class:list={['group block rounded-xl border p-6 hover:shadow-md transition-shadow', className]} style="border-color: #22d3ee33;" onmouseover="this.style.borderColor='#22d3ee'" onmouseout="this.style.borderColor='#22d3ee33'" href={`/certifications/${certification.id}/`}>
+    <TitleTag class="font-serif text-xl leading-tight font-medium group-hover:underline group-hover:decoration-dashed group-hover:decoration-1 group-hover:underline-offset-4 sm:text-2xl">
+        {title}
+    </TitleTag>
+    {issuer && <p class="mt-1 text-sm opacity-70">{issuer}</p>}
+    {description && <p class="mt-2 text-sm leading-normal opacity-70">{description}</p>}
+    {tags && tags.length > 0 && (
+        <div class="mt-4 flex flex-wrap gap-2">
+            {tags.map(tag => (
+                <span class="text-xs px-2 py-1 rounded-full" style="border: 1px solid #22d3ee55; color: #22d3ee; background: #22d3ee11;">
+                    {tag}
+                </span>
+            ))}
+        </div>
+    )}
+</a>

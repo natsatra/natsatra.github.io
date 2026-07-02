@@ -1,24 +1,25 @@
 ---
 import { type CollectionEntry } from 'astro:content';
-import ArrowRight from '../assets/icons/arrow-right.svg';
 
 type Props = { project: CollectionEntry<'projects'>; class?: string; headingLevel?: 'h2' | 'h3' };
 
 const { project, class: className, headingLevel = 'h2' } = Astro.props;
-const { title, description } = project.data;
+const { title, description, tags } = project.data;
 const TitleTag = headingLevel;
 ---
 
-<a class:list={['group flex items-start justify-between gap-8', className]} href={`/projects/${project.id}/`}>
-    <div class="grow">
-        <TitleTag
-            class="font-serif text-xl leading-tight font-medium group-hover:underline group-hover:decoration-dashed group-hover:decoration-1 group-hover:underline-offset-4 sm:text-2xl"
-        >
-            {title}
-        </TitleTag>
-        {description && <div class="mt-1 text-sm leading-normal">{description}</div>}
-    </div>
-    <div class="hidden font-serif italic opacity-0 transition group-hover:opacity-100 sm:inline-flex sm:shrink-0 sm:items-center sm:gap-1">
-        View Project <ArrowRight class="h-4 w-4 fill-current" />
-    </div>
+<a class:list={['group block rounded-xl border p-6 hover:shadow-md transition-shadow', className]} style="border-color: #22d3ee33;" onmouseover="this.style.borderColor='#22d3ee'" onmouseout="this.style.borderColor='#22d3ee33'" href={`/projects/${project.id}/`}>
+    <TitleTag class="font-serif text-xl leading-tight font-medium group-hover:underline group-hover:decoration-dashed group-hover:decoration-1 group-hover:underline-offset-4 sm:text-2xl">
+        {title}
+    </TitleTag>
+    {description && <p class="mt-2 text-sm leading-normal opacity-70">{description}</p>}
+    {tags && tags.length > 0 && (
+        <div class="mt-4 flex flex-wrap gap-2">
+            {tags.map(tag => (
+                <span class="text-xs px-2 py-1 rounded-full" style="border: 1px solid #22d3ee55; color: #22d3ee; background: #22d3ee11;">
+                    {tag}
+                </span>
+            ))}
+        </div>
+    )}
 </a>
