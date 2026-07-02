@@ -11,7 +11,7 @@ seo:
 ### What I do
 
 
-I’m a senior technical writer specializing in enterprise security infrastructure, identity management, and developer-facing B2B SaaS platforms. My background is built on architecting documentation for complex perimeters (IAM, PAM, OAuth, SAML), REST API references, SDK guides, and instruction frameworks for agentic AI features.
+I’m a senior technical writer specializing in enterprise security infrastructure, identity management, and developer-facing enterprise SaaS platforms. My background is built on architecting documentation for complex perimeters (IAM, PAM, OAuth, SAML), REST API references, SDK guides, and instruction frameworks for agentic AI features.
 
 I specialize in translating high-complexity backend architecture into intuitive, production-grade content. Whether restructuring legacy enterprise docs to lift AI chatbot deflection to 72% or mapping out intricate administrative workflows, I advocate for the user by ensuring the documentation is as secure and robust as the product itself.
 
