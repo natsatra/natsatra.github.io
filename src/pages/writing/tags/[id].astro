@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import WritingPreview from '../../../components/WritingPreview.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getAllTags, getPostsByTag } from '../../../utils/data-utils';
+
+export async function getStaticPaths() {
+    const posts = await getCollection('writing');
+    const tags = getAllTags(posts);
+
+    return tags.map((tag) => ({
+        params: { id: tag.id },
+        props: { posts: getPostsByTag(posts, tag.id), tagName: tag.name }
+    }));
+}
+
+type Props = { posts: Awaited<ReturnType<typeof getCollection<'writing'>>>; tagName: string };
+
+const { posts, tagName } = Astro.props;
+---
+
+<BaseLayout title={`Writing tagged "${tagName}"`} description={`Writing samples tagged with ${tagName}`} showHeader={false}>
+    <a href="/writing" class="mb-8 inline-flex items-center gap-1 text-sm hover:underline">← Back to Writing</a>
+    <h1 class="mb-12 font-serif text-2xl leading-tight italic sm:mb-16 sm:text-4xl">Writing tagged "{tagName}"</h1>
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        {posts.map((post) => <WritingPreview post={post} />)}
+    </div>
+</BaseLayout>

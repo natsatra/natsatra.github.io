@@ -2,12 +2,11 @@
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
 import WritingPreview from '../../components/WritingPreview.astro';
-import { sortItemsByDateDesc } from '../../utils/data-utils';
+import { slugify } from '../../utils/common-utils';
 
 export async function getStaticPaths() {
-    const posts = (await getCollection('writing')).sort(sortItemsByDateDesc);
+    const posts = await getCollection('writing');
     const postCount = posts.length;
     return posts.map((post, index) => ({
         params: { id: post.id },
@@ -23,7 +22,7 @@ type Props = { post: CollectionEntry<'writing'>; prevPost: CollectionEntry<'writ
 
 const { href } = Astro.url;
 const { post, prevPost, nextPost } = Astro.props;
-const { title, publishDate, updatedDate, excerpt, tags = [], seo } = post.data;
+const { title, excerpt, tags = [], seo } = post.data;
 const { Content } = await render(post);
 ---
 
@@ -34,19 +33,6 @@ const { Content } = await render(post);
     <article class="mb-16 sm:mb-24">
         <header class="mb-8">
             <h1 class="font-serif text-3xl leading-tight font-medium sm:text-5xl sm:leading-tight">{title}</h1>
-            <div class="mt-4 text-sm">
-                <FormattedDate date={publishDate} />
-                {
-                    updatedDate && (
-                        <>
-                            {' '}
-                            <span>
-                                (Updated on <FormattedDate date={updatedDate} />)
-                            </span>
-                        </>
-                    )
-                }
-            </div>
         </header>
         <div class="prose sm:prose-lg max-w-none">
             <Content />
@@ -56,7 +42,9 @@ const { Content } = await render(post);
                 tags.length > 0 && (
                     <div class="flex flex-wrap gap-x-5 gap-y-1 text-sm">
                         {tags.map((tag) => (
-                            <span class="text-main opacity-70">#{tag}</span>
+                            <a href={`/writing/tags/${slugify(tag)}`} class="text-main opacity-70 hover:underline hover:opacity-100">
+                                #{tag}
+                            </a>
                         ))}
                     </div>
                 )
@@ -68,8 +56,10 @@ const { Content } = await render(post);
         (prevPost || nextPost) && (
             <div class="my-16 sm:my-24">
                 <h2 class="mb-12 font-serif text-xl italic sm:mb-16 sm:text-2xl">Read Next</h2>
-                {nextPost && <WritingPreview post={nextPost} class="mb-10 sm:mb-12" headingLevel="h3" />}
-                {prevPost && <WritingPreview post={prevPost} class="mb-10 sm:mb-12" headingLevel="h3" />}
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    {nextPost && <WritingPreview post={nextPost} headingLevel="h3" />}
+                    {prevPost && <WritingPreview post={prevPost} headingLevel="h3" />}
+                </div>
             </div>
         )
     }

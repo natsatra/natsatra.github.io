@@ -1,0 +1,34 @@
+# Mathangi S. — Technical Writer Portfolio
+
+> Portfolio site for Mathangi, a senior technical writer specializing in enterprise security infrastructure, identity and access management (IAM/PAM, OAuth, SAML), and developer-facing documentation (REST APIs, SDKs, and agentic AI features).
+
+The Writing and Videos sections contain real work samples. The Projects section still contains placeholder content and should not be treated as representative yet.
+
+## Pages
+
+- [About](https://natsatra.github.io/portfolio/about): Background, domain expertise (IAM, PAM, SIEM, compliance frameworks), documentation methodologies, and how to get in touch.
+- [Tech stack](https://natsatra.github.io/portfolio/tech-stack): Tools used across technical authoring, docs-as-code, API/DevOps documentation, design/diagrams, multimedia production, and project management.
+- [Writing](https://natsatra.github.io/portfolio/writing): Paginated grid of technical writing samples, each tagged by category and topic.
+- [Videos](https://natsatra.github.io/portfolio/videos): Video walkthroughs of Kissflow Apps features.
+- [Projects](https://natsatra.github.io/portfolio/projects): Personal coding projects (placeholder content, not yet published).
+
+## Writing samples
+
+- [SDK documentation](https://natsatra.github.io/portfolio/writing/sdk-docs): Kissflow Apps SDK reference docs — snippets for pages, variables, parameters, and components.
+- [API documentation](https://natsatra.github.io/portfolio/writing/api-docs): Kissflow API reference docs for Portals and Dataforms, covering OAuth and access key authentication.
+- [Enterprise SaaS docs](https://natsatra.github.io/portfolio/writing/kf-docs): Kissflow Apps admin guides — variables, app-to-app lookups, and custom form field components.
+- [Enterprise security docs](https://natsatra.github.io/portfolio/writing/pam-docs): PAM360 admin and integration guides — HSM integration, Kubernetes, and just-in-time privilege elevation.
+- [CVE disclosures](https://natsatra.github.io/portfolio/writing/cve): Verified CVE disclosures for PAM360, Password Manager Pro, and Access Manager Plus.
+- [Enterprise security industry report](https://natsatra.github.io/portfolio/writing/longform): Longform content strategy collateral on PAM practices for healthcare organizations.
+
+## Videos
+
+- [AI-powered sample data generation](https://natsatra.github.io/portfolio/videos/video-1): Tutorial on AI-powered sample data generation in Kissflow Apps dataforms.
+- [Building custom components using AI](https://natsatra.github.io/portfolio/videos/video-2): Walkthrough of AI-powered custom component generation in Kissflow Apps.
+- [Building custom form field components](https://natsatra.github.io/portfolio/videos/video-3): Walkthrough of building a custom form field component in Kissflow Apps using React and Kissflow's native SDKs.
+
+## Contact
+
+- Email: mathangikcs@gmail.com
+- GitHub: https://github.com/natsatra
+- LinkedIn: https://linkedin.com/in/mathangikcs

@@ -2,10 +2,9 @@
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import VideoPreview from '../../components/VideoPreview.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { sortItemsByDateDesc } from '../../utils/data-utils';
 
 export async function getStaticPaths() {
-    const videos = (await getCollection('videos')).sort(sortItemsByDateDesc);
+    const videos = await getCollection('videos');
     const videoCount = videos.length;
     return videos.map((video, index) => ({
         params: { id: video.id },
@@ -43,7 +42,7 @@ const { Content } = await render(video);
     {
         (prevVideo || nextVideo) && (
             <div class="my-16 sm:my-24">
-                <h2 class="mb-12 font-serif text-xl italic sm:mb-16 sm:text-2xl">View Next</h2>
+                <h2 class="mb-12 font-serif text-xl italic sm:mb-16 sm:text-2xl">View next</h2>
                 {nextVideo && <VideoPreview project={nextVideo} class="mb-10 sm:mb-12" headingLevel="h3" />}
                 {prevVideo && <VideoPreview project={prevVideo} class="mb-10 sm:mb-12" headingLevel="h3" />}
             </div>

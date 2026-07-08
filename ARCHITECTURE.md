@@ -51,7 +51,8 @@ Markdown files. No logic, just frontmatter (title, date, tags...) + body text.
 - `blog/` — blog posts (`post-1.md` … `post-14.md`)
 - `projects/` — project write-ups (`copythat.md`, `telegram-bot.md`, `walkthrough-video.md`)
 - `videos/` — video entries (`video-1.md`, `video-2.md`)
-- `writing/` — writing samples, same shape as `blog/` (`sample-writing-piece.md`)
+- `writing/` — writing samples, same shape as `blog/` plus a required
+  `category` field (`sample-writing-piece.md`)
 - `certifications/` — certifications/credentials, same shape as `projects/`
   (`sample-certification.md`)
 - `pages/` — one-off static pages (`about.md`) rendered by the catch-all page
@@ -62,10 +63,39 @@ Declares six collections (`blog`, `pages`, `projects`, `videos`, `writing`,
 `certifications`) and the Zod schema each Markdown file's frontmatter must
 match. This is *why* deleting a page like `contact.md` was safe with no other
 changes — nothing else referenced it directly; it was just one more file
-matching the `pages` glob. `writing` reuses the `blog` schema shape
-(`excerpt`/`publishDate`/`updatedDate`/`tags`); `certifications` reuses the
-`projects`/`videos` shape but swaps `repoUrl`/`videoUrl` for `issuer` +
-`credentialUrl`.
+matching the `pages` glob.
+
+Not every collection has a date. `blog`, `projects`, and `certifications`
+all have a required `publishDate` (`blog` also has an optional
+`updatedDate`) and sort newest-first via `sortItemsByDateDesc`. `writing`
+and `videos` deliberately have **no** date field at all — writing samples
+and video entries aren't dated, so both collections render in whatever
+order `getCollection()` returns (which follows file/filename order) instead
+of being sorted, and neither page imports `sortItemsByDateDesc`.
+
+`videos` also has no `videoUrl` field anymore, unlike `projects` (which
+still declares its own `videoUrl`, `repoUrl`, and `type: 'project' |
+'video'` — none of which are actually read by any page or component
+either, for what it's worth; they're unused schema fields, not just a
+`videos`-only problem). `videoUrl` was removed from `videos` specifically
+because nothing read `video.data.videoUrl` — `VideoPreview.astro` and
+`videos/[id].astro` only use `title`/`description`/`tags`/`seo`. The video
+that actually renders on a video's detail page comes from a raw `<iframe>`
+embed hand-written in that post's Markdown body (e.g.
+`player.vimeo.com/video/<id>` or a YouTube embed URL), not from any
+frontmatter field. This means `projects` and `videos` are no longer the
+same shape despite both historically covering "project-like" content —
+`certifications` actually reuses `projects`' shape (keeps `publishDate`),
+swapping `repoUrl`/`videoUrl` for `issuer` + `credentialUrl`.
+
+`writing` also has a required `category` field, which is a free-form
+`z.string()` (not a `z.enum(...)`) so a new category can be introduced by
+just typing it into a post's frontmatter, with no matching edit to
+`content.config.ts`. The trade-off is no build-time typo guard:
+`"Developer Docs"` vs `"Developer docs"` silently produces two distinct
+labels instead of failing the build. `category` is no longer used to group
+the writing listing page into sections — it only renders as a small eyebrow
+label on each `WritingPreview` card (see `writing/[...page].astro` below).
 
 ### `src/data/site-config.ts` — the dial board
 One big typed object (typed by `src/types.ts`) holding everything that isn't
@@ -95,7 +125,7 @@ here and TypeScript will flag every file that's now out of sync.
 | `PostPreview.astro` | Blog post card (title, date, excerpt, "Read post →") | called by blog pages, homepage |
 | `ProjectPreview.astro` | Project card (title, description, tags) | called by project pages, homepage |
 | `VideoPreview.astro` | Video card, same shape as `ProjectPreview.astro` | called by video pages |
-| `WritingPreview.astro` | Writing sample card, same shape as `PostPreview.astro` | called by writing pages |
+| `WritingPreview.astro` | Writing sample card (category eyebrow, title, excerpt, tags), same bordered-card shape as `ProjectPreview.astro`/`VideoPreview.astro`, no date — unlike `PostPreview.astro` | called by writing pages, homepage |
 | `CertificationPreview.astro` | Certification card (title, issuer, description, tags), same shape as `ProjectPreview.astro` | called by certifications pages |
 | `FormattedDate.astro` | Turns a `Date` into "January 1, 2026" | called by `PostPreview.astro`, post page |
 | `CustomImage.astro` | Wraps Astro's `<Image>`/`<img>` so callers don't care if the source is a local optimized image or a plain URL string | called by `Header.astro`, `Hero.astro` |
@@ -114,7 +144,7 @@ preview/components.
 
 | File | URL(s) | What it does |
 |---|---|---|
-| `index.astro` | `/` | Homepage: `Hero` + featured projects + featured posts |
+| `index.astro` | `/` | Homepage: `Hero` + 1 most-recent featured project + featured writing samples |
 | `[...id].astro` | `/about`, etc. | Catch-all renderer for the `pages` collection |
 | `blog/[id].astro` | `/blog/post-1` | Single blog post + prev/next links |
 | `blog/[...page].astro` | `/blog`, `/blog/2` | Paginated blog list |
@@ -123,19 +153,43 @@ preview/components.
 | `videos/[id].astro` | `/videos/video-1` | Single video page |
 | `videos/[...page].astro` | `/videos`, `/videos/2` | Paginated video grid |
 | `writing/[id].astro` | `/writing/sample-writing-piece` | Single writing sample + prev/next links |
-| `writing/[...page].astro` | `/writing`, `/writing/2` | Paginated writing list |
+| `writing/[...page].astro` | `/writing`, `/writing/2` | Paginated writing card grid, structurally identical to `projects/[...page].astro` |
+| `writing/tags/[id].astro` | `/writing/tags/sdk` | Writing samples filtered by one tag, rendered as a card grid (not paginated — tag results are usually small) |
 | `certifications/[id].astro` | `/certifications/sample-certification` | Single certification page |
 | `certifications/[...page].astro` | `/certifications`, `/certifications/2` | Paginated certification grid |
 | `tags/index.astro` | `/tags` | List of all tags used across blog posts |
 | `tags/[id]/[...page].astro` | `/tags/web`, `/tags/web/2` | Posts filtered by one tag, paginated |
 | `rss.xml.js` | `/rss.xml` | RSS feed (not HTML — generates XML directly) |
 
-The tag system (`src/utils/data-utils.ts`'s `getAllTags`/`getPostsByTag`,
-`src/pages/tags/`) only queries the `blog` collection. `writing` entries have
-a `tags` field in frontmatter and render tag badges on their detail page, but
-those badges are plain text, not links — `/tags/*` won't include or filter
-writing content unless `data-utils.ts` and the tags pages are explicitly
-widened to cover it.
+The tag system's shared logic (`src/utils/data-utils.ts`'s
+`getAllTags`/`getPostsByTag`) is generic — typed over
+`'blog' | 'projects' | 'writing' | 'certifications'` — but that doesn't mean
+every collection has tag *pages*. Only two collections actually have routes
+that call these helpers: `blog` (`src/pages/tags/`, paginated, tag badges are
+plain text everywhere blog posts render them) and `writing`
+(`src/pages/writing/tags/[id].astro`, not paginated — tag results are
+usually small enough that a card grid alone is fine — and
+`writing/[id].astro` renders each tag as `<a
+href={`/writing/tags/${slugify(tag)}`}>`, unlike blog's static badges).
+`projects` and `certifications` declare a `tags` field in their
+schema and could reuse the same helpers, but nothing renders their tags as
+links or has a `/projects/tags/`- or `/certifications/tags/`-style route —
+adding one means copying the `writing/tags/[id].astro` pattern (see "Adding
+a new content-collection page" for the general recipe) and swapping in the
+preview component and collection name.
+
+`writing/[...page].astro` is structurally identical to
+`projects/[...page].astro`: `paginate()` the whole `writing` collection at
+`siteConfig.writingPerPage` (default 8) per page, render each entry as a
+`WritingPreview` card in a `grid grid-cols-1 sm:grid-cols-2` layout, then
+`<Pagination page={page} />` below it. Like `videos`, `writing` still has no
+`publishDate`, so there's no `.sort(sortItemsByDateDesc)` call — posts render
+in whatever order `getCollection()` returns (file/filename order). The
+former per-category "Load more" grouping is gone; `category` now only shows
+up as a small eyebrow label on each card (see the `content.config.ts` note
+above), not as a page section. `writing/[id].astro`'s "Read Next" block and
+`writing/tags/[id].astro`'s filtered results use the same card grid layout
+for visual consistency, even though neither of those two is paginated.
 
 ### `src/utils/`
 - `common-utils.ts` → `slugify()` — turns a tag like "Web Dev" into `web-dev`
@@ -252,10 +306,12 @@ in the chain.
 
 ## Adding a new content-collection page
 
-This is the recipe used to add the `writing` (list-style, like `blog`) and
-`certifications` (card-grid style, like `projects`/`videos`) sections. Pick
-whichever existing section is the closer shape match and copy its pattern —
-don't design a new layout from scratch.
+This is the recipe used to add sections like `writing` and `certifications` —
+both are card-grid style, like `projects`/`videos` (`blog`'s list style,
+with `PostPreview.astro`'s date-first row layout, is the other shape to
+copy if a future collection wants that instead). Pick whichever existing
+section is the closer shape match and copy its pattern — don't design a new
+layout from scratch.
 
 1. **`src/content.config.ts`** — add a `defineCollection()` block for the new
    type. Copy the schema from the closest existing collection (`blog` for a
@@ -284,18 +340,73 @@ don't design a new layout from scratch.
    page (`blog/[id].astro` or `projects/[id].astro`/`videos/[id].astro`),
    same swaps as above (collection name, preview component, prop names,
    "Back to X" link, any collection-specific fields like `credentialUrl`).
-7. **`src/utils/data-utils.ts`** — `sortItemsByDateDesc`'s parameter type is
-   a union of collection names; add the new collection name to that union
-   (it's only used for its `.data.publishDate`, so this is just keeping the
-   type honest, not new logic).
+7. **`src/utils/data-utils.ts`** — if the new collection has a `publishDate`,
+   add its name to `sortItemsByDateDesc`'s parameter type union (it's only
+   used for `.data.publishDate`, so this is just keeping the type honest,
+   not new logic) and call `.sort(sortItemsByDateDesc)` where you fetch it.
+   If it doesn't have a date — like `writing` and `videos`, which
+   deliberately skip `publishDate` — skip this step entirely and just use
+   `getCollection()`'s result as-is (file/filename order).
 8. **`src/data/site-config.ts`** — the new page's nav entry goes in
    `headerNavLinks` (or `footerNavLinks`), same as any other nav link — see
    the "Nav bar items" row in the quick reference table below.
 
-What you *don't* need to touch: `BaseLayout.astro`, `Nav.astro`, or the tag
-system — a new collection is invisible to `src/pages/tags/` unless you
-deliberately widen `data-utils.ts`'s `getAllTags`/`getPostsByTag` (currently
-hardcoded to the `blog` collection) and the tags pages to query it too.
+What you *don't* need to touch: `BaseLayout.astro`, `Nav.astro`, or (usually)
+`data-utils.ts` — `getAllTags`/`getPostsByTag` already accept any of
+`blog | projects | writing | certifications`, so a new collection with a
+`tags` field can call them as-is. What a new collection *doesn't* get for
+free is a tag-filter **page** — `src/pages/tags/` only ever queries `blog`,
+and `src/pages/writing/tags/[id].astro` only ever queries `writing`; wiring
+up tag links + a filter route for another collection means copying the
+`writing/tags/[id].astro` pattern (see that page and the `writing/[id].astro`
+tag-link markup) rather than anything in `data-utils.ts`.
+
+## Linting: ESLint (code) + Vale (prose)
+
+Two separate linters cover two separate things — code and content — and
+neither substitutes for the other.
+
+1. **ESLint — `.astro`/`.ts`/`.js` code.** Config lives in
+   `eslint.config.mjs` (flat config): `@eslint/js` recommended rules +
+   `typescript-eslint` recommended rules + `eslint-plugin-astro`'s
+   `flat/recommended` (understands `.astro` files) + `eslint-config-prettier`
+   last, so formatting rules never fight Prettier. `dist/`, `.astro/`, and
+   `node_modules/` are ignored. Two rule tweaks worth knowing about:
+   - `@typescript-eslint/no-unused-vars` is on (as a warning) but allows a
+     leading-underscore escape hatch (`_foo`) for intentionally-unused
+     args/vars, and the base `no-unused-vars` is turned off so it doesn't
+     double-report.
+   - `no-undef` is off — TypeScript already catches undefined references and
+     understands ambient/global types (like Astro's `ImageMetadata`) that
+     `no-undef` doesn't know about, so leaving it on just produces false
+     positives.
+   - Run via `bun run lint` (check) or `bun run lint:fix` (auto-fix).
+2. **Vale — Markdown prose in `src/content/`.** Config is `.vale.ini` at the
+   repo root: `StylesPath = styles`, vocab set to `Portfolio`, and three style
+   packages applied to `*.md`/`*.mdx` — `Google` (style guide), `write-good`
+   (weasel words/passive voice), `alex` (inclusive language). One override:
+   `Google.FirstPerson = NO`, because this is a first-person bio/blog site,
+   not product docs where "I" would be a style violation.
+   - `styles/` holds the *downloaded* rule packages (`Google/`, `write-good/`,
+     `alex/`) fetched by `vale sync` — gitignored (see `.gitignore`'s
+     `/styles/*` + `!/styles/config/` pair) because they're reproducible from
+     `.vale.ini`, not hand-authored.
+   - `styles/config/vocabularies/Portfolio/accept.txt` is the one hand-authored
+     exception: a flat list of words/patterns Vale should stop flagging as
+     spelling/style errors (proper nouns like `Mathangi`, `Natsatra`, tech
+     terms like `OAuth`, `Flexbox`, `Gzip`). This file **is** committed. Add a
+     new word here the same way you'd add one to a spellchecker dictionary —
+     one entry per line, regex-capable (e.g. `PWAs?` matches both `PWA` and
+     `PWAs`).
+   - Vale itself is a standalone binary (not an npm package), so `vale sync`
+     must be run once (and after editing `.vale.ini`'s `Packages` list) to
+     fetch the style packages into `styles/` before linting works locally.
+   - Run via `bun run lint:prose`.
+
+Both are wired into `package.json`'s `scripts`, not into the build — `astro
+build`/`bun run build` doesn't run either linter, so a lint failure won't by
+itself break a deploy. Run `bun run lint` and `bun run lint:prose` explicitly
+(or wire them into CI/a pre-commit hook) if you want them to gate anything.
 
 ## Quick reference: "If I want to change X, edit Y"
 
@@ -305,7 +416,10 @@ hardcoded to the `blog` collection) and the tags pages to query it too.
 | Add a whole new content section (like Writing/Certifications) | see "Adding a new content-collection page" |
 | Social/footer icons | `src/data/site-config.ts` (`socialLinks`) + `src/components/Footer.astro` if the rendering itself needs to change |
 | Homepage hero text/CTA | `src/data/site-config.ts` (`hero`) |
-| How many posts/projects/writing/certifications per page | `src/data/site-config.ts` (`postsPerPage`/`projectsPerPage`/`writingPerPage`/`certificationsPerPage`) |
+| How many posts/projects/writing samples/certifications per page | `src/data/site-config.ts` (`postsPerPage`/`projectsPerPage`/`writingPerPage`/`certificationsPerPage`) |
+| Writing sample categories | just set `category:` in a post's frontmatter — no code change needed, see `src/content.config.ts`. Shows up as a small eyebrow label on each card, not a page section |
+| Look of a writing sample card | `src/components/WritingPreview.astro` |
+| Where a writing sample's tag links go | `src/pages/writing/[id].astro` (tag markup) → `src/pages/writing/tags/[id].astro` (the filter page they link to) |
 | A blog post's content | the matching file in `src/content/blog/` |
 | A writing sample's content | the matching file in `src/content/writing/` |
 | A certification's content | the matching file in `src/content/certifications/` |
@@ -316,6 +430,8 @@ hardcoded to the `blog` collection) and the tags pages to query it too.
 | Fonts | `src/styles/global.css` (imports + `--font-sans`/`--font-serif`) — see "Changing fonts" |
 | Background gradient/texture | `src/layouts/BaseLayout.astro` (gradient + overlay div) / `public/texture.svg` — see "Background: gradient + texture overlay" |
 | Page wrapper (nav+header+footer present on every page) | `src/layouts/BaseLayout.astro` |
+| Code lint rules | `eslint.config.mjs` — see "Linting: ESLint (code) + Vale (prose)" |
+| Prose lint rules / allowed words | `.vale.ini` / `styles/config/vocabularies/Portfolio/accept.txt` — see "Linting: ESLint (code) + Vale (prose)" |
 
 ## Full directory tree
 
@@ -344,11 +460,13 @@ Excludes `node_modules/`, `dist/`, and `.git/`. Depth capped at 4 levels.
 │   ├── extensions.json
 │   ├── launch.json
 │   └── settings.json
+├── .vale.ini
 ├── ARCHITECTURE.md
 ├── LICENSE
 ├── README.md
 ├── astro.config.mjs
 ├── bun.lock
+├── eslint.config.mjs
 ├── package-lock.json
 ├── package.json
 ├── public
@@ -475,13 +593,20 @@ Excludes `node_modules/`, `dist/`, and `.git/`. Depth capped at 4 levels.
 │   │   │   └── [id].astro
 │   │   └── writing
 │   │       ├── [...page].astro
-│   │       └── [id].astro
+│   │       ├── [id].astro
+│   │       └── tags
+│   │           └── [id].astro
 │   ├── styles
 │   │   └── global.css
 │   ├── types.ts
 │   └── utils
 │       ├── common-utils.ts
 │       └── data-utils.ts
+├── styles
+│   └── config
+│       └── vocabularies
+│           └── Portfolio
+│               └── accept.txt
 └── tsconfig.json
 ```
 
@@ -490,6 +615,9 @@ Excludes `node_modules/`, `dist/`, and `.git/`. Depth capped at 4 levels.
 - **`.astro/`** — Astro's build cache (generated content schemas, type declarations); not source, safe to delete/regenerate.
 - **`.astro/collections/`** — auto-generated JSON schemas Astro derives from `content.config.ts` for editor validation/autocomplete.
 - **`.vscode/`** — editor config (recommended extensions, debug launch config, workspace settings) shared via git.
+- **`eslint.config.mjs`** — ESLint flat config for `.astro`/`.ts`/`.js` code; see "Linting: ESLint (code) + Vale (prose)".
+- **`.vale.ini`** — Vale config for prose linting of `src/content/` Markdown; see "Linting: ESLint (code) + Vale (prose)".
+- **`styles/`** — Vale's style packages (`Google/`, `write-good/`, `alex/`, gitignored, fetched by `vale sync`) plus the hand-authored `config/vocabularies/Portfolio/accept.txt` allowlist.
 - **`public/`** — static files served as-is at the site root, untouched by the build pipeline (favicons, robots-adjacent assets, the texture SVG, icons not run through image optimization).
 - **`src/assets/`** — source images/icons that *are* run through Astro's image optimization pipeline because components `import` them.
 - **`src/assets/icons/`** — small inline-usable SVG icons (pagination arrows).
@@ -500,7 +628,7 @@ Excludes `node_modules/`, `dist/`, and `.git/`. Depth capped at 4 levels.
 - **`src/content/pages/`** — one-off static pages (About, etc.) rendered by the catch-all route.
 - **`src/content/projects/`** — project write-up Markdown files.
 - **`src/content/videos/`** — video entry Markdown files.
-- **`src/content/writing/`** — writing sample Markdown files, same schema shape as `blog/`.
+- **`src/content/writing/`** — writing sample Markdown files, same schema shape as `blog/` plus a required `category` field.
 - **`src/content/certifications/`** — certification/credential Markdown files, same schema shape as `projects/`/`videos/`.
 - **`src/data/`** — the site's single config object (nav links, social links, hero copy) that components read instead of hardcoding text.
 - **`src/layouts/`** — page-skeleton wrapper(s) that assemble nav/header/main/footer around every page's content.
@@ -510,7 +638,8 @@ Excludes `node_modules/`, `dist/`, and `.git/`. Depth capped at 4 levels.
 - **`src/pages/tags/`** — routes for the tag index and per-tag filtered post lists.
 - **`src/pages/tags/[id]/`** — dynamic route matching a single tag slug.
 - **`src/pages/videos/`** — routes for the video grid and individual video pages.
-- **`src/pages/writing/`** — routes for the writing list and individual writing samples.
+- **`src/pages/writing/`** — routes for the paginated writing card grid and individual writing samples.
+- **`src/pages/writing/tags/`** — dynamic route matching a single tag slug, filtered to the `writing` collection (not paginated).
 - **`src/pages/certifications/`** — routes for the certification grid and individual certification pages.
 - **`src/styles/`** — global Tailwind CSS (theme colors, font declarations, prose styling).
 - **`src/utils/`** — shared helper functions (slugify, date sorting, tag lookups) used across multiple pages.

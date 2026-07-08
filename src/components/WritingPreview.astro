@@ -1,38 +1,32 @@
 ---
 import { type CollectionEntry } from 'astro:content';
-import ArrowRight from '../assets/icons/arrow-right.svg';
-import FormattedDate from './FormattedDate.astro';
 
 type Props = { post: CollectionEntry<'writing'>; class?: string; headingLevel?: 'h2' | 'h3' };
 
 const { post, class: className, headingLevel = 'h2' } = Astro.props;
-const { title, publishDate, updatedDate, excerpt } = post.data;
+const { title, category, excerpt, tags } = post.data;
 const TitleTag = headingLevel;
 ---
 
-<a class:list={['group flex items-start justify-between gap-8', className]} href={`/writing/${post.id}/`}>
-    <div class="grow">
-        <TitleTag
-            class="font-serif text-xl leading-tight font-medium group-hover:underline group-hover:decoration-dashed group-hover:decoration-1 group-hover:underline-offset-4 sm:text-2xl"
-        >
-            {title}
-        </TitleTag>
-        <div class="mt-1 text-sm leading-normal">
-            <FormattedDate date={publishDate} />
-            {
-                updatedDate && (
-                    <>
-                        {' '}
-                        <span>
-                            (Updated on <FormattedDate date={updatedDate} />)
-                        </span>
-                    </>
-                )
-            }
+<a
+    class:list={['group block rounded-xl border p-6 hover:shadow-md transition-shadow', className]}
+    style="border-color: #22d3ee33;"
+    onmouseover="this.style.borderColor='#22d3ee'"
+    onmouseout="this.style.borderColor='#22d3ee33'"
+    href={`/writing/${post.id}/`}
+>
+    {category && <p class="mb-1 text-xs font-medium tracking-wide uppercase opacity-60">{category}</p>}
+    <TitleTag class="font-serif text-xl leading-tight font-medium group-hover:underline group-hover:decoration-dashed group-hover:decoration-1 group-hover:underline-offset-4 sm:text-2xl">
+        {title}
+    </TitleTag>
+    {excerpt && <p class="mt-2 text-sm leading-normal opacity-70">{excerpt}</p>}
+    {tags && tags.length > 0 && (
+        <div class="mt-4 flex flex-wrap gap-2">
+            {tags.map((tag) => (
+                <span class="rounded-full px-2 py-1 text-xs" style="border: 1px solid #22d3ee55; color: #22d3ee; background: #22d3ee11;">
+                    {tag}
+                </span>
+            ))}
         </div>
-        {excerpt && <div class="mt-3 text-sm leading-normal">{excerpt}</div>}
-    </div>
-    <div class="hidden font-serif italic opacity-0 transition group-hover:opacity-100 sm:inline-flex sm:shrink-0 sm:items-center sm:gap-1">
-        Read post <ArrowRight class="h-4 w-4 fill-current" />
-    </div>
+    )}
 </a>

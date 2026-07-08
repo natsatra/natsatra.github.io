@@ -1,13 +1,13 @@
 ---
-title: 'Video title'
-description: 'One sentence about what this video demonstrates'
-publishDate: 'Jan 01 2024'
+title: 'AI-powered sample data generation'
+description: 'Dataforms in Kissflow Apps'
 isFeatured: true
-videoUrl: 'https://www.youtube.com/watch?v=yourvideoId'
-tags: ['API', 'tutorial']
+tags: ['Feature', 'Tutorial']
 ---
 ## Overview
-What you're demonstrating in this video and why it's useful.
-## What You'll See
-Brief breakdown of what the video covers.
-<iframe width="100%" height="400" src="https://www.youtube.com/embed/YOUR_VIDEO_ID" frameborder="0" allowfullscreen></iframe>
+The video showcases a quick tutorial for the AI-powered sample data generation feature in dataforms within the Kissflow Apps module.
+### Tools used
+Figma animation, ScreenStudio, iMovie, ElevenLabs.
+
+**Duration: 47 seconds**.
+<iframe width="100%" height="400" src="https://player.vimeo.com/video/1000721706" frameborder="0" allowfullscreen></iframe>

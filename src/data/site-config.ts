@@ -26,6 +26,10 @@ const siteConfig: SiteConfig = {
             href: '/about'
         },
         {
+            text: 'Tech stack',
+            href: '/tech-stack'
+        },
+        {
             text: 'Writing',
             href: '/writing'
         },
@@ -62,11 +66,11 @@ const siteConfig: SiteConfig = {
     ],
     hero: {
         title: 'Hi there & welcome to my portfolio!',
-        text: "I'm **Mathangi**, a senior technical writer. I treat every feature I document as a user would: testing behavior, surfacing edge cases, and documenting failure states as thoroughly as happy paths. Eight years across enterprise security products and SaaS taught me the difference between documentation that exists and documentation that works.\n\nI'm also a python enthusiast who loves to dabble in coding projects! Check out my [GitHub](https://github.com/natsatra).",
+        text: "I'm **Mathangi**, a senior technical writer. I treat every feature I document as a user would: testing behavior, surfacing edge cases, and documenting failure states as thoroughly as happy paths. Eight years across enterprise security products and SaaS taught me the difference between documentation that exists and documentation that works.\n\nI'm actively seeking full-time technical writer positions—I'd love to connect if you are looking to expand your documentation team!\n\nGet in touch with me via email [mathangikcs@gmail.com](mailto:mathangikcs@gmail.com) or on <a href=\"https://linkedin.com/in/mathangikcs\" target=\"_blank\" rel=\"noopener noreferrer\">LinkedIn</a>.",
         actions: [
             {
-                text: 'Get in touch',
-                href: '/about#get-in-touch'
+                text: 'About me',
+                href: '/about'
             }
         ]
     },

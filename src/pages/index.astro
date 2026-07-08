@@ -2,17 +2,17 @@
 import { getCollection } from 'astro:content';
 import Button from '../components/Button.astro';
 import Hero from '../components/Hero.astro';
-import PostPreview from '../components/PostPreview.astro';
 import ProjectPreview from '../components/ProjectPreview.astro';
+import WritingPreview from '../components/WritingPreview.astro';
 import siteConfig from '../data/site-config';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { sortItemsByDateDesc } from '../utils/data-utils';
 
-const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
-const featuredPosts = posts.filter(({ data }) => data.isFeatured);
+const posts = await getCollection('writing');
+const featuredPosts = posts.filter(({ data }) => data.isFeatured).sort((a, b) => a.id.localeCompare(b.id));
 
 const projects = (await getCollection('projects')).sort(sortItemsByDateDesc);
-const featuredProjects = projects.filter(({ data }) => data.isFeatured);
+const featuredProjects = projects.filter(({ data }) => data.isFeatured).slice(0, 1);
 ---
 
 <BaseLayout description={siteConfig.description}>
@@ -22,7 +22,7 @@ const featuredProjects = projects.filter(({ data }) => data.isFeatured);
             <div class="mb-16 sm:mb-24">
                 <h2 class="mb-12 font-serif text-xl italic sm:mb-16 sm:text-2xl">Writing</h2>
                 {featuredPosts.map((post) => (
-                    <PostPreview post={post} class="mb-10 sm:mb-12" headingLevel="h3" />
+                    <WritingPreview post={post} class="mb-10 sm:mb-12" headingLevel="h3" />
                 ))}
                 <div class="mt-12 sm:mt-16">
                     <Button href="/writing">View all writing</Button>

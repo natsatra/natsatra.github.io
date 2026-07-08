@@ -14,4 +14,4 @@ What you built, what decisions you made, what you documented.
 ## Tech Stack
 List the main technologies involved.
 ## Links
-[View on GitHub](https://github.com/yourusername/project-one)
+<a href="https://github.com/yourusername/project-one" target="_blank" rel="noopener noreferrer">View on GitHub</a>

@@ -59,9 +59,7 @@ const videos = defineCollection({
         z.object({
             title: z.string(),
             description: z.string().optional(),
-            publishDate: z.coerce.date(),
             isFeatured: z.boolean().default(false),
-            videoUrl: z.string().url().optional(),
             tags: z.array(z.string()).default([]),
             seo: seoSchema(image).optional()
         })
@@ -72,9 +70,8 @@ const writing = defineCollection({
     schema: ({ image }) =>
         z.object({
             title: z.string(),
+            category: z.string(),
             excerpt: z.string().optional(),
-            publishDate: z.coerce.date(),
-            updatedDate: z.coerce.date().optional(),
             isFeatured: z.boolean().default(false),
             tags: z.array(z.string()).default([]),
             seo: seoSchema(image).optional()

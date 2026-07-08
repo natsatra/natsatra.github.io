@@ -51,7 +51,7 @@ const { Content } = await render(certification);
     {
         (prevCertification || nextCertification) && (
             <div class="my-16 sm:my-24">
-                <h2 class="mb-12 font-serif text-xl italic sm:mb-16 sm:text-2xl">View Next</h2>
+                <h2 class="mb-12 font-serif text-xl italic sm:mb-16 sm:text-2xl">View next</h2>
                 {nextCertification && <CertificationPreview certification={nextCertification} class="mb-10 sm:mb-12" headingLevel="h3" />}
                 {prevCertification && <CertificationPreview certification={prevCertification} class="mb-10 sm:mb-12" headingLevel="h3" />}
             </div>
