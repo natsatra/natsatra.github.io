@@ -19,3 +19,7 @@ jobs:
             files: "src/content"
             fail_on_error: "false"
             reporter: "github-check"
+            # reviewdog's github-check reporter exits 1 on ANY finding
+            # (fail_on_error can't override it), so only surface errors in CI;
+            # warnings still show when running vale locally.
+            vale_flags: "--minAlertLevel=error"
