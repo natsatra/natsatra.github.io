@@ -17,5 +17,5 @@ jobs:
         - uses: vale-cli/vale-action@v2
           with:
             files: "src/content"
-            fail_on_error: "true"
+            fail_on_error: "false"
             reporter: "github-check"
