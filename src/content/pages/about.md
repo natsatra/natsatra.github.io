@@ -40,7 +40,7 @@ My writing portfolio, built with <a href="https://astro.build" target="_blank" r
 
 #### 📝 My projects
 
-Currently, I have <a href="https://github.com/natsatra?tab=repositories" target="_blank" rel="noopener noreferrer">two personal projects</a> I built with Claude Code. I'm learning how to work with AI tooling hands-on, not just write about it. More coming as I get further into Python.
+Currently, I have [two personal projects](/projects/) I built with Claude Code. I'm learning how to work with AI tooling hands-on, not just write about it. More coming as I get further into Python.
 
 ---
 
