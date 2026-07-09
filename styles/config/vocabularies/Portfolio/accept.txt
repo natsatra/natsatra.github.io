@@ -56,3 +56,13 @@ CMS
 DAP
 admins?
 applications?
+Bun
+ESLint
+Prettier('s)?
+Vale
+Zod
+alex
+configs?
+frontmatter
+repos?
+reviewdog('s)?
