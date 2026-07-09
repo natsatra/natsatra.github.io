@@ -12,7 +12,7 @@ seo:
 ### What I do
 
 
-I'm a senior technical writer specializing in enterprise security infrastructure, identity management, and developer-facing enterprise SaaS platforms. My background is built on architecting documentation for complex domains (IAM, PAM, OAuth, SAML), REST API references, SDK guides, and instruction frameworks for agentic AI features.
+I'm a senior technical writer specializing in enterprise security infrastructure, identity management, and developer-facing enterprise SaaS platforms. My background spans architecting documentation for complex domains (IAM, PAM, OAuth, SAML), REST API references, SDK guides, and instruction frameworks for agentic AI features.
 
 I specialize in translating high-complexity backend architecture into intuitive, production-grade content for varied audiences. I'm a fierce user advocate and put that into practice by ensuring the UX messaging and documentation are as secure and robust as the product itself.
 
@@ -57,6 +57,8 @@ Identity and Access Management (IAM) · Privileged Access Management (PAM) · Pr
 API & SDK documentation · CLI & developer tools documentation · Docs-as-code · Release notes · Topic-based/modular content structuring (DITA) · UX copy & error messaging · Style guide development · Agile sprint workflows
 
 
+<!-- "get in touch" is idiomatic, not a touchscreen instruction -->
+<!-- vale Google.WordList = NO -->
 ### Get in touch
 
 If you'd like my resume, please get in touch with me via email [mathangikcs@gmail.com](mailto:mathangikcs@gmail.com) or on LinkedIn —> <a href="https://linkedin.com/in/mathangikcs" target="_blank" rel="noopener noreferrer"><img src="/linkedin.png" width="24" height="24" alt="LinkedIn" style="display:inline;vertical-align:middle;" /></a> and I'll send it your way.

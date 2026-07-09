@@ -9,9 +9,9 @@ repoUrl: 'https://github.com/yourusername/project-one'
 ---
 ## Overview
 What the project does and the problem it solves.
-## My Role
+## My role
 What you built, what decisions you made, what you documented.
-## Tech Stack
+## Tech stack
 List the main technologies involved.
 ## Links
 <a href="https://github.com/yourusername/project-one" target="_blank" rel="noopener noreferrer">View on GitHub</a>

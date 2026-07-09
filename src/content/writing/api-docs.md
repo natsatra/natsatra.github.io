@@ -12,4 +12,4 @@ I owned the API documentation for:
 
 I worked with the engineering team to author the API reference documentation covering OAuth, access key authentication, endpoint specifications, and multi-step dependency chains, tested end-to-end via Swagger and Postman.
 
-The above links will take you to the docs hosted on the Postman website.
+These links go to the docs hosted on the Postman website.
