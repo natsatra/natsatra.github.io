@@ -14,3 +14,8 @@ jobs:
         - run: bun install
         - run: bun run lint
         - run: bun run build
+        - uses: vale-cli/vale-action@v2
+          with:
+            files: "src/content"
+            fail_on_error: "true"
+            reporter: "github-check"
