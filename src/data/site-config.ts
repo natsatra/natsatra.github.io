@@ -21,21 +21,21 @@ const siteConfig: SiteConfig = {
             text: 'Home',
             href: '/'
         },
-        {
-            text: 'About',
-            href: '/about'
-        },
-        {
-            text: 'Tech stack',
-            href: '/tech-stack'
-        },
-        {
+         {
             text: 'Writing',
             href: '/writing'
         },
         {
             text: 'Projects',
             href: '/projects'
+        },
+        {
+            text: 'Tech stack',
+            href: '/tech-stack'
+        },
+        {
+            text: 'About',
+            href: '/about'
         },
         {
             text: 'Videos',
