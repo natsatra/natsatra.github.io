@@ -34,13 +34,14 @@ const siteConfig: SiteConfig = {
             href: '/tech-stack'
         },
         {
-            text: 'About',
-            href: '/about'
-        },
-        {
             text: 'Videos',
             href: '/videos'
         },
+        {
+            text: 'About',
+            href: '/about'
+        },
+        
         /*{
             text: 'Certifications',
             href: '/certifications'
