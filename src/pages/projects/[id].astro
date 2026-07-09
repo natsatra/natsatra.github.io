@@ -2,10 +2,9 @@
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import ProjectPreview from '../../components/ProjectPreview.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { sortItemsByDateDesc } from '../../utils/data-utils';
 
 export async function getStaticPaths() {
-    const projects = (await getCollection('projects')).sort(sortItemsByDateDesc);
+    const projects = (await getCollection('projects')).sort((a, b) => a.data.title.localeCompare(b.data.title));
     const projectCount = projects.length;
     return projects.map((project, index) => ({
         params: { id: project.id },

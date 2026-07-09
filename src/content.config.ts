@@ -44,10 +44,8 @@ const projects = defineCollection({
         z.object({
             title: z.string(),
             description: z.string().optional(),
-            publishDate: z.coerce.date(),
             isFeatured: z.boolean().default(false),
             type: z.enum(['project', 'video']).default('project'),
-            repoUrl: z.string().url().optional(),
             videoUrl: z.string().url().optional(),
             tags: z.array(z.string()).default([]),
             seo: seoSchema(image).optional()

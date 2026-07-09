@@ -2,7 +2,7 @@
 
 > Portfolio site for Mathangi, a senior technical writer specializing in enterprise security infrastructure, identity and access management (IAM/PAM, OAuth, SAML), and developer-facing documentation (REST APIs, SDKs, and agentic AI features).
 
-The Writing and Videos sections contain real work samples. The Projects section still contains placeholder content and should not be treated as representative yet.
+The Writing, Videos, and Projects sections contain real work samples.
 
 ## Pages
 
@@ -10,7 +10,7 @@ The Writing and Videos sections contain real work samples. The Projects section 
 - [Tech stack](https://natsatra.github.io/portfolio/tech-stack): Tools used across technical authoring, docs-as-code, API/DevOps documentation, design/diagrams, multimedia production, and project management.
 - [Writing](https://natsatra.github.io/portfolio/writing): Paginated grid of technical writing samples, each tagged by category and topic.
 - [Videos](https://natsatra.github.io/portfolio/videos): Video walkthroughs of Kissflow Apps features.
-- [Projects](https://natsatra.github.io/portfolio/projects): Personal coding projects (placeholder content, not yet published).
+- [Projects](https://natsatra.github.io/portfolio/projects): Personal coding projects, each documented with a security-focused write-up.
 
 ## Writing samples
 
@@ -20,6 +20,11 @@ The Writing and Videos sections contain real work samples. The Projects section 
 - [Enterprise security docs](https://natsatra.github.io/portfolio/writing/pam-docs): PAM360 admin and integration guides — HSM integration, Kubernetes, and just-in-time privilege elevation.
 - [CVE disclosures](https://natsatra.github.io/portfolio/writing/cve): Verified CVE disclosures for PAM360, Password Manager Pro, and Access Manager Plus.
 - [Enterprise security industry report](https://natsatra.github.io/portfolio/writing/longform): Longform content strategy collateral on PAM practices for healthcare organizations.
+
+## Projects
+
+- [CopyThat: Browser extension](https://natsatra.github.io/portfolio/projects/copythat): A tabbed, color-coded notepad extension built with vanilla JavaScript — local-only storage, minimal permissions, and a documented threat model.
+- [Lunacle: Telegram reminder bot](https://natsatra.github.io/portfolio/projects/telegram-bot): A serverless Python/Cloudflare Workers bot sending moon-phase and personal reminders — webhook authentication, secret handling, and documented accepted risks.
 
 ## Videos
 
