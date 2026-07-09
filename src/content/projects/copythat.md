@@ -1,5 +1,5 @@
 ---
-title: 'CopyThat: Browser extension'
+title: 'Browser extension: CopyThat'
 description: 'A tabbed, color-coded notepad with a one-click copy function'
 isFeatured: true
 type: 'project'

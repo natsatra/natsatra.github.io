@@ -1,5 +1,5 @@
 ---
-title: 'Lunacle 🌙 : Telegram reminder bot'
+title: 'Telegram reminder bot: Lunacle 🌙'
 description: 'Sends moon-phase and personal reminders through Telegram'
 isFeatured: true
 type: 'project'
