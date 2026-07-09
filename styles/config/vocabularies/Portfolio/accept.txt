@@ -37,3 +37,17 @@ touchpoints
 transformative
 viewport
 Kissflow
+Camtasia
+Dataforms
+dataforms
+Figma
+Forumbee
+Longform
+SDKs?
+Snagit
+Visio
+Zoho
+[Ll]ookups?
+[Ww]alkthroughs?
+dev
+nShield
