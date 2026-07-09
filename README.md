@@ -1,6 +1,6 @@
 # Mathangi's portfolio — docs as code, demonstrated
 
-My technical writing portfolio, live at [natsatra.github.io/portfolio](https://natsatra.github.io/portfolio).
+My technical writing portfolio, live at [natsatra.github.io](https://natsatra.github.io).
 
 This site is more than a list of work samples — it's a working demonstration of the docs-as-code workflow I use professionally. Every page is Markdown under version control, validated against a schema, linted for prose style, and shipped through CI. The repository itself is part of the portfolio.
 
@@ -66,7 +66,7 @@ For a technical writer, this is audience analysis applied to a new audience: the
 You need [Bun](https://bun.sh/) (npm works too) and, for local prose linting, the [Vale CLI](https://vale.sh/docs/vale-cli/installation/).
 
 ```sh
-git clone https://github.com/natsatra/portfolio.git
+git clone https://github.com/natsatra/natsatra.github.io.git
 cd portfolio
 bun install
 

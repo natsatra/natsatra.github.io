@@ -3,7 +3,7 @@ import linkedinIcon from '../assets/images/linkedin.png';
 import type { SiteConfig } from '../types';
 
 const siteConfig: SiteConfig = {
-    website: 'https://natsatra.github.io/portfolio',
+    website: 'https://natsatra.github.io',
     avatar: {
         src: avatar,
         alt: 'Mathangi'
