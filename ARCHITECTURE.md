@@ -445,6 +445,59 @@ build`/`bun run build` doesn't run either linter, so a lint failure won't by
 itself break a deploy. Run `bun run lint` and `bun run lint:prose` explicitly
 (or wire them into CI/a pre-commit hook) if you want them to gate anything.
 
+## CI: deploying to GitHub Pages
+
+The site goes live via GitHub Actions — `.github/workflows/deploy.yml`. Every
+push to `main` builds the site and publishes `dist/` to GitHub Pages at
+<https://natsatra.github.io>; there's no manual upload step anywhere. The
+workflow can also be run by hand from the repo's Actions tab
+(`workflow_dispatch`).
+
+How the workflow is put together:
+
+- **Trigger** — `on: push: branches: [main]` plus `workflow_dispatch` for
+  manual runs.
+- **Permissions** — `pages: write` + `id-token: write` let the workflow
+  publish to Pages using GitHub's OIDC deployment flow (no PAT or deploy key
+  to manage); `contents: read` is all the checkout needs.
+- **`build` job** — `withastro/action@v3` with `package-manager: bun@latest`
+  does the whole build (install deps, `astro build`, upload `dist/` as a
+  Pages artifact) in one step, matching the Bun-first setup used locally.
+- **`deploy` job** — `actions/deploy-pages@v4` takes the artifact from the
+  build job (`needs: build`) and publishes it to the `github-pages`
+  environment, whose URL shows up on the run page.
+- **Concurrency** — `group: pages` with `cancel-in-progress: false` queues
+  overlapping deploys instead of cancelling a publish that's mid-flight.
+
+Setting this up from scratch (the one-time steps, if this is ever recreated
+or cloned to a new account):
+
+1. **Name the repo `<username>.github.io`** to serve at the root URL
+   (`https://<username>.github.io`). Any other repo name works too, but the
+   site then lives under `https://<username>.github.io/<repo>/` and needs a
+   matching `base` option in `astro.config.mjs`.
+2. **Repo Settings → Pages → Build and deployment → Source: "GitHub
+   Actions"** (not "Deploy from a branch"). Without this, the workflow's
+   deploy step fails because no Pages site exists to receive the artifact.
+3. **Add `.github/workflows/deploy.yml`** as described above.
+4. **Set the site URL** — `website` in `src/data/site-config.ts`, which
+   `astro.config.mjs` reads as `site:`. This doesn't affect where the site
+   deploys (the repo name controls that); it's what the sitemap, RSS feed,
+   and canonical/Open Graph URLs are generated from, so a mismatch means
+   wrong absolute links in those.
+5. **Push to `main`** — the first successful run creates the `github-pages`
+   environment automatically.
+
+A custom domain would be: repo Settings → Pages → Custom domain (GitHub
+writes a `CNAME` file), a DNS record at the registrar pointing at GitHub
+Pages, and updating `website` in `site-config.ts` to the new domain.
+
+The lint workflow (`.github/workflows/linting.yml`, see the linting section
+above) runs on the same pushes but is **independent** — `deploy.yml` doesn't
+wait for it, so a lint failure never blocks a deploy. Gating deploys on lint
+would mean merging the two workflows (lint steps before the build job) or
+making `deploy` depend on the lint job.
+
 ## Quick reference: "If I want to change X, edit Y"
 
 | Want to change... | Edit |
@@ -470,6 +523,8 @@ itself break a deploy. Run `bun run lint` and `bun run lint:prose` explicitly
 | Background gradient/texture | `src/layouts/BaseLayout.astro` (gradient + overlay div) / `public/texture.svg` — see "Background: gradient + texture overlay" |
 | Page wrapper (nav+header+footer present on every page) | `src/layouts/BaseLayout.astro` |
 | Code lint rules | `eslint.config.mjs` — see "Linting: ESLint (code) + Vale (prose)" |
+| How/when the site deploys | `.github/workflows/deploy.yml` — see "CI: deploying to GitHub Pages" |
+| The site's canonical URL (sitemap/RSS/OG links) | `website` in `src/data/site-config.ts` |
 | Prose lint rules / allowed words | `.vale.ini` / `styles/config/vocabularies/Portfolio/accept.txt` — see "Linting: ESLint (code) + Vale (prose)" |
 
 ## Full directory tree
