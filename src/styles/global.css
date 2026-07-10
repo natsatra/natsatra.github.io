@@ -103,7 +103,15 @@ html.dark {
         vertical-align: middle;
     }
 }
-/* Accent colors */
+/* Accent + background theme. Change --accent and --bg-gradient here to
+   retheme the whole site; the tint/faint/soft shades are derived.
+   The one thing this can't reach is public/texture.svg, which hardcodes
+   the accent color in its stroke/fill attributes — edit it separately. */
 :root {
     --accent: #22d3ee;
+    --accent-soft: color-mix(in srgb, var(--accent) 33%, transparent); /* tag pill borders (was #22d3ee55) */
+    --accent-faint: color-mix(in srgb, var(--accent) 20%, transparent); /* card borders (was #22d3ee33) */
+    --accent-tint: color-mix(in srgb, var(--accent) 7%, transparent); /* hover backgrounds (was #22d3ee11) */
+    --bg-base: #0a0a14;
+    --bg-gradient: radial-gradient(ellipse at 50% 40%, #1a2a4a 0%, #0d1220 40%, var(--bg-base) 70%);
 }

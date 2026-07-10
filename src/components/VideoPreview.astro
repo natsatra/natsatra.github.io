@@ -8,7 +8,7 @@ const { title, description, tags } = project.data;
 const TitleTag = headingLevel;
 ---
 
-<a class:list={['group block rounded-xl border p-6 hover:shadow-md transition-shadow', className]} style="border-color: #22d3ee33;" onmouseover="this.style.borderColor='#22d3ee'" onmouseout="this.style.borderColor='#22d3ee33'" href={`/videos/${project.id}/`}>
+<a class:list={['group block rounded-xl border p-6 hover:shadow-md transition-shadow', className]} style="border-color: var(--accent-faint);" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--accent-faint)'" href={`/videos/${project.id}/`}>
     <TitleTag class="font-serif text-xl leading-tight font-medium group-hover:underline group-hover:decoration-dashed group-hover:decoration-1 group-hover:underline-offset-4 sm:text-2xl">
         {title}
     </TitleTag>
@@ -16,7 +16,7 @@ const TitleTag = headingLevel;
     {tags && tags.length > 0 && (
         <div class="mt-4 flex flex-wrap gap-2">
             {tags.map(tag => (
-                <span class="text-xs px-2 py-1 rounded-full" style="border: 1px solid #22d3ee55; color: #22d3ee; background: #22d3ee11;">
+                <span class="text-xs px-2 py-1 rounded-full" style="border: 1px solid var(--accent-soft); color: var(--accent); background: var(--accent-tint);">
                     {tag}
                 </span>
             ))}

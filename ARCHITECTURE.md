@@ -230,11 +230,21 @@ Tailwind base styles/theme variables, and the actual image/icon files
 
 ## Background: gradient + texture overlay
 
-The dark gradient behind every page isn't in CSS — it's set via inline
-`<script>` in `src/layouts/BaseLayout.astro` (lines ~18-37), which forces dark
-mode and sets a `radial-gradient(...)` directly on `document.documentElement`
-and `document.body`. It's re-applied on `astro:before-swap`/`astro:after-swap`
-so it survives client-side page transitions.
+The dark gradient behind every page is *defined* in CSS —
+`--bg-base`/`--bg-gradient` in `src/styles/global.css` — but *applied* via an
+inline `<script>` in `src/layouts/BaseLayout.astro`, which forces dark mode
+and sets `var(--bg-gradient)` directly on `document.documentElement` and
+`document.body`. It's re-applied on `astro:before-swap`/`astro:after-swap` so
+it survives client-side page transitions.
+
+The cyan accent color lives next to it in `global.css`: `--accent`, with
+three derived shades (`--accent-soft`/`-faint`/`-tint`) computed via
+`color-mix()`, so changing `--accent` recolors card borders, tag pills,
+buttons, and the active nav link in one edit. Components reference these
+variables (inline `style` attributes and hover handlers use `var(--accent…)`,
+never a hex). The one exception is `public/texture.svg`, which hardcodes the
+accent in its `stroke`/`fill` attributes — CSS variables can't reach inside a
+`background-image` URL, so retheming the accent means editing that file too.
 
 On top of that gradient, `BaseLayout.astro` renders a fixed, full-viewport,
 tiled SVG texture as a decorative overlay:
@@ -269,8 +279,11 @@ both colored `#22d3ee`:
 ```
 Took this from <a href="https://www.svgbackgrounds.com/set/free-svg-backgrounds-and-patterns/">Free SVG Backgrounds and Patterns by SVGBackgrounds.com</a>
 To change it:
-- **Gradient colors/shape** — edit the `radial-gradient(...)` string in
-  `BaseLayout.astro` (all 3 occurrences must match).
+- **Gradient colors/shape** — edit `--bg-gradient` (and `--bg-base`, the
+  solid fallback) in `src/styles/global.css`; the script in
+  `BaseLayout.astro` picks the change up automatically.
+- **Accent color** — edit `--accent` in `src/styles/global.css`; the derived
+  shades follow. Update `public/texture.svg`'s hardcoded color to match.
 - **Texture pattern/color** — edit `public/texture.svg` directly (it's a
   static file, not an imported asset, so no rebuild pipeline/hashing —
   changes show up on refresh).
@@ -520,7 +533,8 @@ making `deploy` depend on the lint job.
 | Shared TypeScript shapes | `src/types.ts` |
 | Look of post/project/writing/certification cards | `src/components/PostPreview.astro` / `ProjectPreview.astro` / `VideoPreview.astro` / `WritingPreview.astro` / `CertificationPreview.astro` |
 | Fonts | `src/styles/global.css` (imports + `--font-sans`/`--font-serif`) — see "Changing fonts" |
-| Background gradient/texture | `src/layouts/BaseLayout.astro` (gradient + overlay div) / `public/texture.svg` — see "Background: gradient + texture overlay" |
+| Accent color (cards, tag pills, buttons, active nav link) | `--accent` in `src/styles/global.css` + the hardcoded color in `public/texture.svg` — see "Background: gradient + texture overlay" |
+| Background gradient/texture | `--bg-gradient`/`--bg-base` in `src/styles/global.css` (applied by `BaseLayout.astro`; overlay div also lives there) / `public/texture.svg` — see "Background: gradient + texture overlay" |
 | Page wrapper (nav+header+footer present on every page) | `src/layouts/BaseLayout.astro` |
 | Code lint rules | `eslint.config.mjs` — see "Linting: ESLint (code) + Vale (prose)" |
 | How/when the site deploys | `.github/workflows/deploy.yml` — see "CI: deploying to GitHub Pages" |

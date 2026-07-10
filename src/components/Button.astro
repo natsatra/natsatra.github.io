@@ -8,16 +8,16 @@ type Props = ButtonProps | AnchorProps;
 
 const { href, class: className, ...rest } = Astro.props;
 const buttonClasses =
-    'inline-flex items-center justify-center px-6 py-2 font-serif leading-tight italic text-main bg-transparent rounded-full transition-colors hover:bg-[#22d3ee11]';
+    'inline-flex items-center justify-center px-6 py-2 font-serif leading-tight italic text-main bg-transparent rounded-full transition-colors hover:bg-[color:var(--accent-tint)]';
 ---
 
 {
    href ? (
-    <a href={href} class:list={[buttonClasses, className]} style="border: 1px solid #22d3ee; color: #22d3ee;" {...rest}>
+    <a href={href} class:list={[buttonClasses, className]} style="border: 1px solid var(--accent); color: var(--accent);" {...rest}>
         <slot />
     </a>
 ) : (
-    <button class:list={[buttonClasses, 'cursor-pointer', className]} style="border: 1px solid #22d3ee; color: #22d3ee;" {...rest}>
+    <button class:list={[buttonClasses, 'cursor-pointer', className]} style="border: 1px solid var(--accent); color: var(--accent);" {...rest}>
         <slot />
     </button>
 )

@@ -16,25 +16,19 @@ const { showHeader = true, ...head } = Astro.props;
     <head>
         <BaseHead {...head} />
         <script is:inline>
-    document.documentElement.classList.add('dark');
-    document.documentElement.style.background = '#0a0a14';
-    document.documentElement.style.backgroundImage = 'radial-gradient(ellipse at 50% 40%, #1a2a4a 0%, #0d1220 40%, #0a0a14 70%)';
-    function applyBackground() {
+    function applyDarkBackground() {
+        document.documentElement.classList.add('dark');
+        document.documentElement.style.background = 'var(--bg-base)';
+        document.documentElement.style.backgroundImage = 'var(--bg-gradient)';
         if (document.body) {
-            document.body.style.background = '#0a0a14';
-            document.body.style.backgroundImage = 'radial-gradient(ellipse at 50% 40%, #1a2a4a 0%, #0d1220 40%, #0a0a14 70%)';
+            document.body.style.background = 'var(--bg-base)';
+            document.body.style.backgroundImage = 'var(--bg-gradient)';
         }
     }
-    document.addEventListener('DOMContentLoaded', applyBackground);
-    document.addEventListener('astro:before-swap', () => {
-        document.documentElement.classList.add('dark');
-        document.documentElement.style.background = '#0a0a14';
-        document.documentElement.style.backgroundImage = 'radial-gradient(ellipse at 50% 40%, #1a2a4a 0%, #0d1220 40%, #0a0a14 70%)';
-    });
-    document.addEventListener('astro:after-swap', () => {
-        document.documentElement.classList.add('dark');
-        applyBackground();
-    });
+    applyDarkBackground();
+    document.addEventListener('DOMContentLoaded', applyDarkBackground);
+    document.addEventListener('astro:before-swap', applyDarkBackground);
+    document.addEventListener('astro:after-swap', applyDarkBackground);
 </script>
 <ClientRouter />
 <GoogleAnalytics id="G-FB6207101F" />
