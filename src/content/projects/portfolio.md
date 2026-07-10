@@ -7,9 +7,6 @@ type: 'project'
 tags: ['Astro JS', 'CSS', 'Markdown']
 ---
 
-
-# Mathangi's portfolio — docs as code, demonstrated
-
 My technical writing portfolio, live at [natsatra.github.io](https://natsatra.github.io).
 
 This site is more than a list of work samples — it's a working demonstration of the docs-as-code workflow I use professionally. Every page is Markdown under version control, validated against a schema, linted for prose style, and shipped through CI. The repository itself is part of the portfolio.
