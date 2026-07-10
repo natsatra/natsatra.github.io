@@ -123,7 +123,6 @@ bun run dev        # dev server at localhost:4321
 └── astro.config.mjs
 ```
 
-For a deeper walkthrough of the architecture, see [ARCHITECTURE.md](/ARCHITECTURE.md).
 
 ## Tech stack
 
