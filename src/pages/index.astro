@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Button from '../components/Button.astro';
 import Hero from '../components/Hero.astro';
 import ProjectPreview from '../components/ProjectPreview.astro';
+import StatsBar from '../components/StatsBar.astro';
 import WritingPreview from '../components/WritingPreview.astro';
 import siteConfig from '../data/site-config';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -17,6 +18,7 @@ const featuredProjects = projects.filter(({ data }) => data.isFeatured).slice(0,
 
 <BaseLayout description={siteConfig.description}>
     <Hero {...siteConfig.hero} />
+    <StatsBar class="-mt-6 mb-12 sm:-mt-12 sm:mb-16" />
         {
         featuredPosts?.length > 0 && (
             <div class="mb-16 sm:mb-24">

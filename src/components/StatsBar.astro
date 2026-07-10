@@ -1,0 +1,120 @@
+---
+type Props = { class?: string };
+
+const { class: className } = Astro.props;
+
+const recentImpactLabel = 'Recent impact at Kissflow';
+const stats: { value: string; label: string; srValue?: string }[] = [
+    { value: '8+', label: 'years in technical writing' },
+    { value: '50+', label: 'features authored' },
+    { value: '200+', label: 'articles restructured for LLM vectorization' },
+    { value: '40% → 72%', srValue: '40% up to 72%', label: 'support deflection rate achieved' }
+];
+---
+
+<section aria-labelledby="impact-heading" class:list={['stats-bar', className]}>
+    <h2 id="impact-heading" class="sr-only">Impact</h2>
+    <h3 class="stats-eyebrow">{recentImpactLabel}</h3>
+    <dl class="stats-panel">
+        {
+            stats.map((stat) => (
+                <div class="stat">
+                    <dt>{stat.label}</dt>
+                    <dd>
+                        {stat.srValue ? (
+                            <>
+                                <span aria-hidden="true">{stat.value}</span>
+                                <span class="sr-only">{stat.srValue}</span>
+                            </>
+                        ) : (
+                            stat.value
+                        )}
+                    </dd>
+                </div>
+            ))
+        }
+    </dl>
+</section>
+
+<style>
+    .stats-eyebrow {
+        margin-bottom: 0.75rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--text-main);
+        opacity: 0.6;
+    }
+
+    .stats-panel {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 0.75rem;
+        background: rgba(255, 255, 255, 0.05);
+        overflow: hidden;
+    }
+
+    .stat {
+        display: flex;
+        /* dt (label) precedes dd (value) in the DOM for screen-reader order;
+           reversed here so the number renders on top */
+        flex-direction: column-reverse;
+        justify-content: flex-end;
+        gap: 0.375rem;
+        padding: 1rem 1.25rem;
+        border-left: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .stat:first-child {
+        border-left: none;
+    }
+
+    .stat dd {
+        margin: 0;
+        font-family: var(--font-serif);
+        font-size: 1.625rem;
+        font-weight: 600;
+        line-height: 1;
+        white-space: nowrap;
+        color: var(--text-main);
+    }
+
+    .stat dt {
+        max-width: 7.5rem;
+        font-size: 0.75rem;
+        line-height: 1.4;
+        font-weight: 400;
+        color: #8b9db7;
+    }
+
+    /* Tablet: 2x2, vertical divider only mid-row, horizontal divider between rows */
+    @media (max-width: 47.9375rem) {
+        .stats-panel {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .stat {
+            border-left: none;
+        }
+        .stat:nth-child(even) {
+            border-left: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        .stat:nth-child(n + 3) {
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+        }
+    }
+
+    /* Mobile: single column, horizontal dividers only */
+    @media (max-width: 29.9375rem) {
+        .stats-panel {
+            grid-template-columns: 1fr;
+        }
+        .stat:nth-child(even) {
+            border-left: none;
+        }
+        .stat:nth-child(n + 2) {
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+        }
+    }
+</style>

@@ -66,14 +66,14 @@ const siteConfig: SiteConfig = {
         }
     ],
     hero: {
-        title: 'Hi there & welcome to my portfolio!',
-        text: "I'm **Mathangi**, a senior technical writer. I treat every feature I document as a user would: testing behavior, surfacing edge cases, and documenting failure states as thoroughly as happy paths. Eight years across enterprise security products and SaaS taught me the difference between documentation that exists and documentation that works.\n\nI'm actively seeking full-time technical writer positions—I'd love to connect if you are looking to expand your documentation team!\n\nGet in touch with me via email [mathangikcs@gmail.com](mailto:mathangikcs@gmail.com) or on <a href=\"https://linkedin.com/in/mathangikcs\" target=\"_blank\" rel=\"noopener noreferrer\">LinkedIn</a>.",
-        actions: [
+        title: 'I make complex software make sense.',
+        text: "I'm **Mathangi**, a senior technical writer in enterprise security and enterprise SaaS — domains where the concepts are dense and the cost of confusion is high. I treat every feature the way a user would: testing behavior, surfacing edge cases, and covering failure states as thoroughly as happy paths. It's the difference between documentation that exists and documentation that works.\n\nI'm looking for my next full-time technical writing role. If you're growing a docs team, please reach out to me at [mathangikcs@gmail.com](mailto:mathangikcs@gmail.com) or on <a href=\"https://linkedin.com/in/mathangikcs\" target=\"_blank\" rel=\"noopener noreferrer\">LinkedIn</a>!",
+        /*actions: [
             {
                 text: 'About me',
                 href: '/about'
             }
-        ]
+        ]*/
     },
     postsPerPage: 8,
     projectsPerPage: 8,
