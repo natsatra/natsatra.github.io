@@ -2,10 +2,10 @@
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import CertificationPreview from '../../components/CertificationPreview.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { sortItemsByDateDesc } from '../../utils/data-utils';
+import { sortItemsByOrder } from '../../utils/data-utils';
 
 export async function getStaticPaths() {
-    const certifications = (await getCollection('certifications')).sort(sortItemsByDateDesc);
+    const certifications = (await getCollection('certifications')).sort(sortItemsByOrder);
     const certificationCount = certifications.length;
     return certifications.map((certification, index) => ({
         params: { id: certification.id },

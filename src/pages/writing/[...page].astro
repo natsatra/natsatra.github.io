@@ -5,9 +5,10 @@ import Pagination from '../../components/Pagination.astro';
 import WritingPreview from '../../components/WritingPreview.astro';
 import siteConfig from '../../data/site-config';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { sortItemsByOrder } from '../../utils/data-utils';
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-    const posts = await getCollection('writing');
+    const posts = (await getCollection('writing')).sort(sortItemsByOrder);
     return paginate(posts, { pageSize: siteConfig.writingPerPage || 8 });
 }
 

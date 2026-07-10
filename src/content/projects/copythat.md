@@ -1,5 +1,6 @@
 ---
 title: 'Browser extension: CopyThat'
+order: 2
 description: 'A tabbed, color-coded notepad with a one-click copy function'
 isFeatured: true
 type: 'project'

@@ -1,7 +1,8 @@
 ---
-title: 'Enterprise security industry report'
-category: 'Content strategy collateral'
-excerpt: 'Longform content about PAM security practices'
+title: 'PAM for Healthcare: Industry report'
+order: 6
+category: 'Longform content collateral'
+excerpt: 'PAM practices for healthcare data security'
 tags: ['Infosec']
 ---
 

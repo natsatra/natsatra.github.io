@@ -47,16 +47,19 @@ components/*.astro  ◀── reads ── data/site-config.ts
 ## Folder-by-folder
 
 ### `src/content/` — the words
-Markdown files. No logic, just frontmatter (title, date, tags...) + body text.
-- `blog/` — blog posts (`post-1.md` … `post-14.md`)
-- `projects/` — project write-ups (`copythat.md`, `telegram-bot.md`, `walkthrough-video.md`)
-- `videos/` — video entries (`video-1.md`, `video-2.md`)
-- `writing/` — writing samples, same shape as `blog/` plus a required
-  `category` field (`sample-writing-piece.md`)
-- `certifications/` — certifications/credentials, same shape as `projects/`
-  (`sample-certification.md`)
-- `pages/` — one-off static pages (`about.md`) rendered by the catch-all page
-  `src/pages/[...id].astro`
+Markdown files. No logic, just frontmatter (title, tags...) + body text.
+- `blog/` — blog posts (currently just `sample-post.md`, a `draft: true`
+  skeleton that builds nothing until the flag is removed)
+- `projects/` — project write-ups (`copythat.md`, `portfolio.md`,
+  `telegram-bot.md`)
+- `videos/` — video entries (`video-1.md` … `video-3.md`)
+- `writing/` — writing samples with a required `category` and a manual
+  `order` field (`api-docs.md`, `cve.md`, `kf-docs.md`, `longform.md`,
+  `pam-docs.md`, `sdk-docs.md`)
+- `certifications/` — certifications/credentials (`outskill.md`), ordered by
+  the same manual `order` field
+- `pages/` — one-off static pages (`about.md`, `tech-stack.md`) rendered by
+  the catch-all page `src/pages/[...id].astro`
 
 ### `src/content.config.ts` — content rules
 Declares six collections (`blog`, `pages`, `projects`, `videos`, `writing`,
@@ -65,13 +68,23 @@ match. This is *why* deleting a page like `contact.md` was safe with no other
 changes — nothing else referenced it directly; it was just one more file
 matching the `pages` glob.
 
-Not every collection has a date. `blog`, `projects`, and `certifications`
-all have a required `publishDate` (`blog` also has an optional
-`updatedDate`) and sort newest-first via `sortItemsByDateDesc`. `writing`
-and `videos` deliberately have **no** date field at all — writing samples
-and video entries aren't dated, so both collections render in whatever
-order `getCollection()` returns (which follows file/filename order) instead
-of being sorted, and neither page imports `sortItemsByDateDesc`.
+Not every collection has a date. Only `blog` has a required `publishDate`
+(plus an optional `updatedDate`) and sorts via `sortBlogPosts`: by `order`
+first, then newest-first by date among posts with the same `order` — since
+`order` defaults to 999, posts that don't set it just sort newest-first,
+and setting a low `order` pins a post above the date sort. `blog` also has
+a `draft` flag (default `false`): every blog fetch site (list, detail,
+both tag pages, RSS) filters drafts out with
+`getCollection('blog', ({ data }) => !data.draft)`, so a `draft: true`
+post builds nothing and ships nowhere until the flag is removed.
+`projects`, `videos`, `writing`, and
+`certifications` deliberately have **no** date field at all — those entries
+aren't dated. Instead, all four are ordered manually: each schema has
+`order: z.number().default(999)`, and every page that lists them sorts
+ascending via `sortItemsByOrder`. To reorder entries, edit the `order:`
+number in each file's frontmatter (lower = earlier; ties and gaps like
+10/20/30 are fine) — no file renames needed. A file that omits `order`
+falls to the bottom via the 999 default.
 
 `videos` also has no `videoUrl` field anymore, unlike `projects` (which
 still declares its own `videoUrl`, `repoUrl`, and `type: 'project' |
@@ -85,8 +98,14 @@ embed hand-written in that post's Markdown body (e.g.
 `player.vimeo.com/video/<id>` or a YouTube embed URL), not from any
 frontmatter field. This means `projects` and `videos` are no longer the
 same shape despite both historically covering "project-like" content —
-`certifications` actually reuses `projects`' shape (keeps `publishDate`),
-swapping `repoUrl`/`videoUrl` for `issuer` + `credentialUrl`.
+`certifications` started from `projects`' shape, swapping
+`repoUrl`/`videoUrl` for `issuer` + `credentialUrl`, then dropped
+`publishDate` in favor of the manual `order` field (see above).
+`credentialUrl` is a plain `z.string()` (not `.url()`) on purpose: it can
+hold either a full URL to a hosted credential or a root-relative path to a
+PDF placed in `public/` (e.g. `/certs/outskill.pdf`).
+`certifications/[id].astro` renders it as a "View credential →" link when
+present.
 
 `writing` also has a required `category` field, which is a free-form
 `z.string()` (not a `z.enum(...)`) so a new category can be introduced by
@@ -144,18 +163,18 @@ preview/components.
 
 | File | URL(s) | What it does |
 |---|---|---|
-| `index.astro` | `/` | Homepage: `Hero` + 1 most-recent featured project + featured writing samples |
+| `index.astro` | `/` | Homepage: `Hero` + the first featured project (lowest `order`) + featured writing samples |
 | `[...id].astro` | `/about`, etc. | Catch-all renderer for the `pages` collection |
-| `blog/[id].astro` | `/blog/post-1` | Single blog post + prev/next links |
+| `blog/[id].astro` | `/blog/<post-slug>` | Single blog post + prev/next links |
 | `blog/[...page].astro` | `/blog`, `/blog/2` | Paginated blog list |
 | `projects/[id].astro` | `/projects/copythat` | Single project page |
 | `projects/[...page].astro` | `/projects`, `/projects/2` | Paginated project grid |
 | `videos/[id].astro` | `/videos/video-1` | Single video page |
 | `videos/[...page].astro` | `/videos`, `/videos/2` | Paginated video grid |
-| `writing/[id].astro` | `/writing/sample-writing-piece` | Single writing sample + prev/next links |
+| `writing/[id].astro` | `/writing/api-docs` | Single writing sample + prev/next links |
 | `writing/[...page].astro` | `/writing`, `/writing/2` | Paginated writing card grid, structurally identical to `projects/[...page].astro` |
 | `writing/tags/[id].astro` | `/writing/tags/sdk` | Writing samples filtered by one tag, rendered as a card grid (not paginated — tag results are usually small) |
-| `certifications/[id].astro` | `/certifications/sample-certification` | Single certification page |
+| `certifications/[id].astro` | `/certifications/outskill` | Single certification page |
 | `certifications/[...page].astro` | `/certifications`, `/certifications/2` | Paginated certification grid |
 | `tags/index.astro` | `/tags` | List of all tags used across blog posts |
 | `tags/[id]/[...page].astro` | `/tags/web`, `/tags/web/2` | Posts filtered by one tag, paginated |
@@ -183,8 +202,11 @@ preview component and collection name.
 `siteConfig.writingPerPage` (default 8) per page, render each entry as a
 `WritingPreview` card in a `grid grid-cols-1 sm:grid-cols-2` layout, then
 `<Pagination page={page} />` below it. Like `videos`, `writing` still has no
-`publishDate`, so there's no `.sort(sortItemsByDateDesc)` call — posts render
-in whatever order `getCollection()` returns (file/filename order). The
+`publishDate`, so there's no `.sort(sortItemsByDateDesc)` call — instead,
+every page that lists `writing` (the paginated grid, the tag filter page,
+the detail page's prev/next "Read Next" pair, and the homepage's featured
+section) applies `.sort(sortItemsByOrder)`, driven by each file's `order:`
+frontmatter. The certification pages do the same. The
 former per-category "Load more" grouping is gone; `category` now only shows
 up as a small eyebrow label on each card (see the `content.config.ts` note
 above), not as a page section. `writing/[id].astro`'s "Read Next" block and
@@ -194,9 +216,13 @@ for visual consistency, even though neither of those two is paginated.
 ### `src/utils/`
 - `common-utils.ts` → `slugify()` — turns a tag like "Web Dev" into `web-dev`
   for URLs.
-- `data-utils.ts` → `sortItemsByDateDesc()`, `getAllTags()`,
-  `getPostsByTag()` — shared logic so every page that lists/sorts/filters
-  posts uses the same rules instead of reimplementing them.
+- `data-utils.ts` → `sortBlogPosts()`, `sortItemsByOrder()`,
+  `getAllTags()`, `getPostsByTag()` — shared logic so every page that
+  lists/sorts/filters posts uses the same rules instead of reimplementing
+  them. `sortBlogPosts` is the blog sort (manual `order` first, then
+  newest-first by `publishDate`); `sortItemsByOrder` is the ascending
+  manual sort for `projects`, `videos`, `writing`, and `certifications`
+  (compares `data.order`).
 
 ### `src/styles/global.css` + `src/assets/`
 Tailwind base styles/theme variables, and the actual image/icon files
@@ -340,13 +366,24 @@ layout from scratch.
    page (`blog/[id].astro` or `projects/[id].astro`/`videos/[id].astro`),
    same swaps as above (collection name, preview component, prop names,
    "Back to X" link, any collection-specific fields like `credentialUrl`).
-7. **`src/utils/data-utils.ts`** — if the new collection has a `publishDate`,
-   add its name to `sortItemsByDateDesc`'s parameter type union (it's only
-   used for `.data.publishDate`, so this is just keeping the type honest,
-   not new logic) and call `.sort(sortItemsByDateDesc)` where you fetch it.
-   If it doesn't have a date — like `writing` and `videos`, which
-   deliberately skip `publishDate` — skip this step entirely and just use
-   `getCollection()`'s result as-is (file/filename order).
+7. **`src/utils/data-utils.ts`** — decide how the collection is ordered:
+   - **Dated content** (like `blog`): give the schema a `publishDate` and
+     sort newest-first where you fetch it (see `sortBlogPosts`, which also
+     folds in the manual `order` override — copy it, or widen its type
+     union if the new collection has the same `publishDate` + `order`
+     fields).
+   - **Manually curated order** (like `projects`, `videos`, `writing`, and
+     `certifications`): give the schema `order: z.number().default(999)`,
+     add the collection to `sortItemsByOrder`'s type union, and call
+     `.sort(sortItemsByOrder)` in *every* page that lists the collection —
+     the paginated grid, the detail page (its prev/next links follow the
+     sorted array), any tag-filter page, and any homepage featured section.
+     Entries are then reordered by editing `order:` numbers in frontmatter,
+     never by renaming files.
+   - **Neither**: skip this step entirely and use `getCollection()`'s
+     result as-is (file/filename order). No current collection does this —
+     `pages` has no order because nothing lists it; each page is its own
+     standalone URL.
 8. **`src/data/site-config.ts`** — the new page's nav entry goes in
    `headerNavLinks` (or `footerNavLinks`), same as any other nav link — see
    the "Nav bar items" row in the quick reference table below.
@@ -418,6 +455,8 @@ itself break a deploy. Run `bun run lint` and `bun run lint:prose` explicitly
 | Homepage hero text/CTA | `src/data/site-config.ts` (`hero`) |
 | How many posts/projects/writing samples/certifications per page | `src/data/site-config.ts` (`postsPerPage`/`projectsPerPage`/`writingPerPage`/`certificationsPerPage`) |
 | Writing sample categories | just set `category:` in a post's frontmatter — no code change needed, see `src/content.config.ts`. Shows up as a small eyebrow label on each card, not a page section |
+| Order of projects, videos, writing samples, or certifications | set `order:` in each file's frontmatter (lower = earlier; omitted = sinks to bottom) — no code change, no file renames. Blog posts too, as a tiebreak override on top of newest-first date sort |
+| Keep a blog post unpublished while writing it | `draft: true` in its frontmatter — excluded from the blog list, detail routes, tag pages, and RSS until removed |
 | Look of a writing sample card | `src/components/WritingPreview.astro` |
 | Where a writing sample's tag links go | `src/pages/writing/[id].astro` (tag markup) → `src/pages/writing/tags/[id].astro` (the filter page they link to) |
 | A blog post's content | the matching file in `src/content/blog/` |
@@ -435,11 +474,12 @@ itself break a deploy. Run `bun run lint` and `bun run lint:prose` explicitly
 
 ## Full directory tree
 
-Excludes `node_modules/`, `dist/`, and `.git/`. Depth capped at 4 levels.
+Excludes `node_modules/`, `dist/`, `.git/`, and `.DS_Store` clutter; the
+downloaded Vale style packages under `styles/` are collapsed. Depth capped
+at 4 levels.
 
 ```
 .
-├── .DS_Store
 ├── .astro
 │   ├── collections
 │   │   ├── blog.schema.json
@@ -454,67 +494,46 @@ Excludes `node_modules/`, `dist/`, and `.git/`. Depth capped at 4 levels.
 │   ├── data-store.json
 │   ├── settings.json
 │   └── types.d.ts
+├── .claude
+│   └── settings.local.json
+├── .github
+│   └── workflows
+│       ├── deploy.yml
+│       └── linting.yml
 ├── .gitignore
 ├── .prettierrc
+├── .vale.ini
 ├── .vscode
 │   ├── extensions.json
 │   ├── launch.json
 │   └── settings.json
-├── .vale.ini
 ├── ARCHITECTURE.md
 ├── LICENSE
 ├── README.md
 ├── astro.config.mjs
 ├── bun.lock
 ├── eslint.config.mjs
-├── package-lock.json
 ├── package.json
 ├── public
-│   ├── .DS_Store
 │   ├── capsuleblue.svg
-│   ├── dante-preview.jpg
+│   ├── certs
+│   │   └── outskill.pdf
 │   ├── favicon-old.svg
 │   ├── favicon.svg
 │   ├── github.png
 │   ├── linkedin.png
+│   ├── llms.txt
 │   ├── texture.svg
 │   └── theme-toggle.js
 ├── src
-│   ├── .DS_Store
 │   ├── assets
-│   │   ├── .DS_Store
 │   │   ├── icons
 │   │   │   ├── arrow-left.svg
 │   │   │   └── arrow-right.svg
 │   │   └── images
-│   │       ├── .DS_Store
-│   │       ├── about.jpg
-│   │       ├── avatar.jpg
 │   │       ├── avatarr.jpg
 │   │       ├── github-banner.png
-│   │       ├── hero.jpg
 │   │       ├── linkedin.png
-│   │       ├── post-1.jpg
-│   │       ├── post-10.jpg
-│   │       ├── post-11.jpg
-│   │       ├── post-12.jpg
-│   │       ├── post-13.jpg
-│   │       ├── post-14.jpg
-│   │       ├── post-2.jpg
-│   │       ├── post-3.jpg
-│   │       ├── post-4.jpg
-│   │       ├── post-5.jpg
-│   │       ├── post-6.jpg
-│   │       ├── post-7.jpg
-│   │       ├── post-8.jpg
-│   │       ├── post-9.jpg
-│   │       ├── project-1.jpg
-│   │       ├── project-2.jpg
-│   │       ├── project-3.jpg
-│   │       ├── project-4.jpg
-│   │       ├── project-5.jpg
-│   │       ├── project-6.jpg
-│   │       ├── project-7.jpg
 │   │       ├── round.jpg
 │   │       └── white.png
 │   ├── components
@@ -536,43 +555,34 @@ Excludes `node_modules/`, `dist/`, and `.git/`. Depth capped at 4 levels.
 │   │   ├── VideoPreview.astro
 │   │   └── WritingPreview.astro
 │   ├── content
-│   │   ├── .DS_Store
 │   │   ├── blog
-│   │   │   ├── post-1.md
-│   │   │   ├── post-10.md
-│   │   │   ├── post-11.md
-│   │   │   ├── post-12.md
-│   │   │   ├── post-13.md
-│   │   │   ├── post-14.md
-│   │   │   ├── post-2.md
-│   │   │   ├── post-3.md
-│   │   │   ├── post-4.md
-│   │   │   ├── post-5.md
-│   │   │   ├── post-6.md
-│   │   │   ├── post-7.md
-│   │   │   ├── post-8.md
-│   │   │   └── post-9.md
+│   │   │   └── sample-post.md    (draft skeleton — not published)
 │   │   ├── certifications
-│   │   │   └── sample-certification.md
+│   │   │   └── outskill.md
 │   │   ├── pages
-│   │   │   ├── .DS_Store
-│   │   │   └── about.md
+│   │   │   ├── about.md
+│   │   │   └── tech-stack.md
 │   │   ├── projects
 │   │   │   ├── copythat.md
-│   │   │   ├── telegram-bot.md
-│   │   │   └── walkthrough-video.md
+│   │   │   ├── portfolio.md
+│   │   │   └── telegram-bot.md
 │   │   ├── videos
 │   │   │   ├── video-1.md
-│   │   │   └── video-2.md
+│   │   │   ├── video-2.md
+│   │   │   └── video-3.md
 │   │   └── writing
-│   │       └── sample-writing-piece.md
+│   │       ├── api-docs.md
+│   │       ├── cve.md
+│   │       ├── kf-docs.md
+│   │       ├── longform.md
+│   │       ├── pam-docs.md
+│   │       └── sdk-docs.md
 │   ├── content.config.ts
 │   ├── data
 │   │   └── site-config.ts
 │   ├── layouts
 │   │   └── BaseLayout.astro
 │   ├── pages
-│   │   ├── .DS_Store
 │   │   ├── [...id].astro
 │   │   ├── blog
 │   │   │   ├── [...page].astro
@@ -587,6 +597,7 @@ Excludes `node_modules/`, `dist/`, and `.git/`. Depth capped at 4 levels.
 │   │   ├── rss.xml.js
 │   │   ├── tags
 │   │   │   ├── [id]
+│   │   │   │   └── [...page].astro
 │   │   │   └── index.astro
 │   │   ├── videos
 │   │   │   ├── [...page].astro
@@ -603,10 +614,13 @@ Excludes `node_modules/`, `dist/`, and `.git/`. Depth capped at 4 levels.
 │       ├── common-utils.ts
 │       └── data-utils.ts
 ├── styles
-│   └── config
-│       └── vocabularies
-│           └── Portfolio
-│               └── accept.txt
+│   ├── Google          (vale sync output — gitignored)
+│   ├── alex            (vale sync output — gitignored)
+│   ├── config
+│   │   └── vocabularies
+│   │       └── Portfolio
+│   │           └── accept.txt
+│   └── write-good      (vale sync output — gitignored)
 └── tsconfig.json
 ```
 
@@ -624,12 +638,13 @@ Excludes `node_modules/`, `dist/`, and `.git/`. Depth capped at 4 levels.
 - **`src/assets/images/`** — photos/logos referenced by `site-config.ts` and content frontmatter, optimized at build time.
 - **`src/components/`** — reusable `.astro` UI building blocks (nav, footer, cards, buttons) composed by pages and layouts.
 - **`src/content/`** — the site's actual written content as Markdown, organized by collection type.
-- **`src/content/blog/`** — blog post Markdown files.
+- **`.github/workflows/`** — GitHub Actions: `deploy.yml` (build + GitHub Pages deploy) and `linting.yml` (lint checks).
+- **`src/content/blog/`** — blog post Markdown files; posts with `draft: true` stay unpublished (currently just a draft skeleton).
 - **`src/content/pages/`** — one-off static pages (About, etc.) rendered by the catch-all route.
-- **`src/content/projects/`** — project write-up Markdown files.
-- **`src/content/videos/`** — video entry Markdown files.
-- **`src/content/writing/`** — writing sample Markdown files, same schema shape as `blog/` plus a required `category` field.
-- **`src/content/certifications/`** — certification/credential Markdown files, same schema shape as `projects/`/`videos/`.
+- **`src/content/projects/`** — project write-up Markdown files, listed by their manual `order` field.
+- **`src/content/videos/`** — video entry Markdown files, listed by their manual `order` field.
+- **`src/content/writing/`** — writing sample Markdown files; required `category` field plus a manual `order` field that controls listing position.
+- **`src/content/certifications/`** — certification/credential Markdown files (`issuer`, `credentialUrl`, manual `order` — no date field).
 - **`src/data/`** — the site's single config object (nav links, social links, hero copy) that components read instead of hardcoding text.
 - **`src/layouts/`** — page-skeleton wrapper(s) that assemble nav/header/main/footer around every page's content.
 - **`src/pages/`** — Astro's file-based router; each file/folder maps to a URL.

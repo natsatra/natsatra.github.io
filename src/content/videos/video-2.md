@@ -1,5 +1,6 @@
 ---
 title: 'Building custom components using AI'
+order: 2
 description: 'Custom components in Kissflow Apps'
 isFeatured: true
 tags: ['Feature', 'Tutorial']

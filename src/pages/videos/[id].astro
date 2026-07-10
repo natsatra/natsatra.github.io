@@ -2,9 +2,10 @@
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import VideoPreview from '../../components/VideoPreview.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { sortItemsByOrder } from '../../utils/data-utils';
 
 export async function getStaticPaths() {
-    const videos = await getCollection('videos');
+    const videos = (await getCollection('videos')).sort(sortItemsByOrder);
     const videoCount = videos.length;
     return videos.map((video, index) => ({
         params: { id: video.id },

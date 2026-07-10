@@ -4,11 +4,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Button from '../../components/Button.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import PostPreview from '../../components/PostPreview.astro';
-import { sortItemsByDateDesc } from '../../utils/data-utils';
+import { sortBlogPosts } from '../../utils/data-utils';
 import { slugify } from '../../utils/common-utils';
 
 export async function getStaticPaths() {
-    const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
+    const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(sortBlogPosts);
     const postCount = posts.length;
     return posts.map((post, index) => ({
         params: { id: post.id },

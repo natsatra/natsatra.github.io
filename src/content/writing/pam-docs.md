@@ -1,5 +1,6 @@
 ---
 title: 'Enterprise security docs'
+order: 4
 category: 'Admin and integration guides'
 isFeatured: true
 excerpt: 'PAM360 documentation samples'

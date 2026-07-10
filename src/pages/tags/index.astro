@@ -2,9 +2,9 @@
 import { getCollection } from 'astro:content';
 import ArrowRight from '../../assets/icons/arrow-right.svg';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getAllTags, getPostsByTag, sortItemsByDateDesc } from '../../utils/data-utils';
+import { getAllTags, getPostsByTag, sortBlogPosts } from '../../utils/data-utils';
 
-const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(sortBlogPosts);
 const tags = getAllTags(posts).sort((tagA, tagB) => {
     const postCountTagA = getPostsByTag(posts, tagA.id).length;
     const postCountTagB = getPostsByTag(posts, tagB.id).length;

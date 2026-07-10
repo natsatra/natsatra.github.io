@@ -5,10 +5,10 @@ import CertificationPreview from '../../components/CertificationPreview.astro';
 import Pagination from '../../components/Pagination.astro';
 import siteConfig from '../../data/site-config';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { sortItemsByDateDesc } from '../../utils/data-utils';
+import { sortItemsByOrder } from '../../utils/data-utils';
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-    const certifications = (await getCollection('certifications')).sort(sortItemsByDateDesc);
+    const certifications = (await getCollection('certifications')).sort(sortItemsByOrder);
     return paginate(certifications, { pageSize: siteConfig.certificationsPerPage || 6 });
 }
 

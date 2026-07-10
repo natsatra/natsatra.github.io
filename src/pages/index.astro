@@ -6,11 +6,12 @@ import ProjectPreview from '../components/ProjectPreview.astro';
 import WritingPreview from '../components/WritingPreview.astro';
 import siteConfig from '../data/site-config';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { sortItemsByOrder } from '../utils/data-utils';
 
 const posts = await getCollection('writing');
-const featuredPosts = posts.filter(({ data }) => data.isFeatured).sort((a, b) => a.id.localeCompare(b.id));
+const featuredPosts = posts.filter(({ data }) => data.isFeatured).sort(sortItemsByOrder);
 
-const projects = (await getCollection('projects')).sort((a, b) => a.data.title.localeCompare(b.data.title));
+const projects = (await getCollection('projects')).sort(sortItemsByOrder);
 const featuredProjects = projects.filter(({ data }) => data.isFeatured).slice(0, 1);
 ---
 

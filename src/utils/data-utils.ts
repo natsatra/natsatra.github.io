@@ -1,8 +1,14 @@
 import { type CollectionEntry } from 'astro:content';
 import { slugify } from './common-utils';
 
-export function sortItemsByDateDesc(itemA: CollectionEntry<'blog' | 'certifications'>, itemB: CollectionEntry<'blog' | 'certifications'>) {
-    return new Date(itemB.data.publishDate).getTime() - new Date(itemA.data.publishDate).getTime();
+export function sortBlogPosts(itemA: CollectionEntry<'blog'>, itemB: CollectionEntry<'blog'>) {
+    return itemA.data.order - itemB.data.order || new Date(itemB.data.publishDate).getTime() - new Date(itemA.data.publishDate).getTime();
+}
+
+type OrderedCollection = 'writing' | 'certifications' | 'projects' | 'videos';
+
+export function sortItemsByOrder(itemA: CollectionEntry<OrderedCollection>, itemB: CollectionEntry<OrderedCollection>) {
+    return itemA.data.order - itemB.data.order;
 }
 
 export function getAllTags(posts: CollectionEntry<'blog' | 'projects' | 'writing' | 'certifications'>[]) {

@@ -1,5 +1,6 @@
 ---
 title: 'Enterprise SaaS docs'
+order: 3
 category: 'Kissflow Apps admin guides'
 isFeatured: true
 excerpt: 'Kissflow documentation samples'

@@ -1,5 +1,6 @@
 ---
 title: 'Building custom form field components'
+order: 3
 description: 'Custom components in Kissflow Apps'
 isFeatured: true
 tags: ['Feature', 'Tutorial']

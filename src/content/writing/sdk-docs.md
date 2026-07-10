@@ -1,5 +1,6 @@
 ---
 title: 'SDK documentation'
+order: 2
 category: 'Developer docs'
 excerpt: 'Kissflow SDK docs'
 tags: ['SDK', 'CLI']

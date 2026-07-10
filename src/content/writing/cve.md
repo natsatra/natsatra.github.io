@@ -1,5 +1,6 @@
 ---
 title: 'CVE disclosures'
+order: 5
 category: 'Security advisories'
 excerpt: 'CVE disclosures for PAM & PSM'
 tags: ['Infosec']

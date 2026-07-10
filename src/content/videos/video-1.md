@@ -1,5 +1,6 @@
 ---
 title: 'AI-powered sample data generation'
+order: 1
 description: 'Dataforms in Kissflow Apps'
 isFeatured: true
 tags: ['Feature', 'Tutorial']

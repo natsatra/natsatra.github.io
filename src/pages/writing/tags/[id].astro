@@ -2,10 +2,10 @@
 import { getCollection } from 'astro:content';
 import WritingPreview from '../../../components/WritingPreview.astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { getAllTags, getPostsByTag } from '../../../utils/data-utils';
+import { getAllTags, getPostsByTag, sortItemsByOrder } from '../../../utils/data-utils';
 
 export async function getStaticPaths() {
-    const posts = await getCollection('writing');
+    const posts = (await getCollection('writing')).sort(sortItemsByOrder);
     const tags = getAllTags(posts);
 
     return tags.map((tag) => ({

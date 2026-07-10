@@ -5,10 +5,10 @@ import Pagination from '../../../components/Pagination.astro';
 import PostPreview from '../../../components/PostPreview.astro';
 import siteConfig from '../../../data/site-config';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { getAllTags, getPostsByTag, sortItemsByDateDesc } from '../../../utils/data-utils';
+import { getAllTags, getPostsByTag, sortBlogPosts } from '../../../utils/data-utils';
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-    const posts = (await getCollection('blog')).sort(sortItemsByDateDesc);
+    const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(sortBlogPosts);
     const tags = getAllTags(posts);
 
     return tags.flatMap((tag) => {
@@ -25,7 +25,7 @@ type Props = { page: Page<CollectionEntry<'blog'>> };
 const { page } = Astro.props;
 const blog = page.data;
 const params = Astro.params;
-const allPosts = await getCollection('blog');
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const allTags = getAllTags(allPosts);
 const currentTag = allTags.find((tag) => {
     return tag.id === params.id;

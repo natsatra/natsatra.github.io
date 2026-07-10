@@ -5,9 +5,10 @@ import Pagination from '../../components/Pagination.astro';
 import VideoPreview from '../../components/VideoPreview.astro';
 import siteConfig from '../../data/site-config';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { sortItemsByOrder } from '../../utils/data-utils';
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-    const videos = await getCollection('videos');
+    const videos = (await getCollection('videos')).sort(sortItemsByOrder);
     return paginate(videos, { pageSize: siteConfig.projectsPerPage || 6 });
 }
 

@@ -23,6 +23,8 @@ const blog = defineCollection({
             excerpt: z.string().optional(),
             publishDate: z.coerce.date(),
             updatedDate: z.coerce.date().optional(),
+            draft: z.boolean().default(false),
+            order: z.number().default(999),
             isFeatured: z.boolean().default(false),
             tags: z.array(z.string()).default([]),
             seo: seoSchema(image).optional()
@@ -44,6 +46,7 @@ const projects = defineCollection({
         z.object({
             title: z.string(),
             description: z.string().optional(),
+            order: z.number().default(999),
             isFeatured: z.boolean().default(false),
             type: z.enum(['project', 'video']).default('project'),
             videoUrl: z.string().url().optional(),
@@ -57,6 +60,7 @@ const videos = defineCollection({
         z.object({
             title: z.string(),
             description: z.string().optional(),
+            order: z.number().default(999),
             isFeatured: z.boolean().default(false),
             tags: z.array(z.string()).default([]),
             seo: seoSchema(image).optional()
@@ -69,6 +73,7 @@ const writing = defineCollection({
         z.object({
             title: z.string(),
             category: z.string(),
+            order: z.number().default(999),
             excerpt: z.string().optional(),
             isFeatured: z.boolean().default(false),
             tags: z.array(z.string()).default([]),
@@ -83,9 +88,9 @@ const certifications = defineCollection({
             title: z.string(),
             issuer: z.string().optional(),
             description: z.string().optional(),
-            publishDate: z.coerce.date(),
+            order: z.number().default(999),
             isFeatured: z.boolean().default(false),
-            credentialUrl: z.string().url().optional(),
+            credentialUrl: z.string().optional(),
             tags: z.array(z.string()).default([]),
             seo: seoSchema(image).optional()
         })
