@@ -57,7 +57,7 @@ One nuance worth calling out: reviewdog's `github-check` reporter fails the run 
 
 ## Docs for machine readers: llms.txt
 
-The site ships an [`llms.txt`](public/llms.txt) at the root, following the [llms.txt proposal](https://llmstxt.org/). AI assistants and agents are now a real audience for any published site, and they read it badly by default — HTML arrives wrapped in navigation, scripts, and markup that waste context-window tokens and bury the content. `llms.txt` is the fix — a curated Markdown map at a predictable path that tells a machine reader what the site is and where the canonical content lives, in a format it can consume directly.
+The site ships an [`llms.txt`](/llms.txt) at the root, following the [llms.txt proposal](https://llmstxt.org/). AI assistants and agents are now a real audience for any published site, and they read it badly by default — HTML arrives wrapped in navigation, scripts, and markup that waste context-window tokens and bury the content. `llms.txt` is the fix — a curated Markdown map at a predictable path that tells a machine reader what the site is and where the canonical content lives, in a format it can consume directly.
 
 Here it contains:
 
@@ -123,7 +123,7 @@ bun run dev        # dev server at localhost:4321
 └── astro.config.mjs
 ```
 
-For a deeper walkthrough of the architecture, see [ARCHITECTURE.md](ARCHITECTURE.md).
+For a deeper walkthrough of the architecture, see [ARCHITECTURE.md](/ARCHITECTURE.md).
 
 ## Tech stack
 
