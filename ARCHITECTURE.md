@@ -104,8 +104,10 @@ same shape despite both historically covering "project-like" content —
 `credentialUrl` is a plain `z.string()` (not `.url()`) on purpose: it can
 hold either a full URL to a hosted credential or a root-relative path to a
 PDF placed in `public/` (e.g. `/certs/outskill.pdf`).
-`certifications/[id].astro` renders it as a "View credential →" link when
-present.
+`certifications/[id].astro` renders it as a "View cert" pill button when
+present — the shared `Button.astro` component (same one as the homepage's
+"About me" CTA), opening in a new tab. A certification without
+`credentialUrl` simply gets no button.
 
 `writing` also has a required `category` field, which is a free-form
 `z.string()` (not a `z.enum(...)`) so a new category can be introduced by
@@ -138,7 +140,7 @@ here and TypeScript will flag every file that's now out of sync.
 | `Header.astro` | Avatar + site title/subtitle block under the nav | `site-config.avatar/headerTitle/subtitle` |
 | `Hero.astro` | The big intro section on the homepage (title, image, markdown text, CTA buttons) | `site-config.hero` |
 | `Footer.astro` | Footer nav links + social links + copyright | `site-config.footerNavLinks/socialLinks` |
-| `Button.astro` | Pill-shaped button/link, used everywhere a CTA is needed | called by `Hero.astro`, pages |
+| `Button.astro` | Pill-shaped button/link, used everywhere a CTA is needed (e.g. "About me" on the homepage, "View cert" on certification pages) | called by `Hero.astro`, pages |
 | `IconButton.astro` | Small icon-only button (prev/next arrows) | called by `Pagination.astro` |
 | `Pagination.astro` | Prev/Next links for any paginated list | called by blog/projects/videos/writing/certifications/tags index pages |
 | `PostPreview.astro` | Blog post card (title, date, excerpt, "Read post →") | called by blog pages, homepage |
@@ -528,6 +530,7 @@ making `deploy` depend on the lint job.
 | A blog post's content | the matching file in `src/content/blog/` |
 | A writing sample's content | the matching file in `src/content/writing/` |
 | A certification's content | the matching file in `src/content/certifications/` |
+| Where a cert's "View cert" button points | `credentialUrl:` in that cert's frontmatter (full URL or a path to a PDF in `public/`); the button markup lives in `src/pages/certifications/[id].astro` |
 | The About page content | the matching file in `src/content/pages/` |
 | What fields a blog/project/video/writing/certification entry can have | `src/content.config.ts` |
 | Shared TypeScript shapes | `src/types.ts` |

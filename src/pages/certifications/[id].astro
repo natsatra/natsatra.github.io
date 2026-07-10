@@ -1,5 +1,6 @@
 ---
 import { type CollectionEntry, getCollection, render } from 'astro:content';
+import Button from '../../components/Button.astro';
 import CertificationPreview from '../../components/CertificationPreview.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { sortItemsByOrder } from '../../utils/data-utils';
@@ -42,9 +43,11 @@ const { Content } = await render(certification);
         </div>
         {
             credentialUrl && (
-                <a class="mt-8 inline-flex items-center gap-1 text-sm hover:underline" href={credentialUrl} target="_blank" rel="noopener noreferrer">
-                    View credential →
-                </a>
+                <div class="mt-8">
+                    <Button href={credentialUrl} target="_blank" rel="noopener noreferrer">
+                        View cert
+                    </Button>
+                </div>
             )
         }
     </article>
