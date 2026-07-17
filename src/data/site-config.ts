@@ -33,10 +33,10 @@ const siteConfig: SiteConfig = {
             text: 'Tech stack',
             href: '/tech-stack'
         },
-        {
+        /*{
             text: 'Videos',
             href: '/videos'
-        },
+        },*/
         {
             text: 'About',
             href: '/about'

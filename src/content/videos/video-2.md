@@ -9,7 +9,6 @@ tags: ['Feature', 'Tutorial']
 The video showcases a walkthrough of the AI-powered custom component generation in the Kissflow Apps module.
 
 ### What I did
-I owned every stage of production, end to end:
 
 - **Scripting** — wrote the walkthrough script and paced the narration to match what happens on screen.
 - **Voiceover** — turned the script into commentary with ElevenLabs text-to-speech.

@@ -9,7 +9,6 @@ tags: ['Feature', 'Tutorial']
 The video provides a detailed walkthrough on how to build a custom form field component in the Kissflow Apps module using React JS framework and Kissflow's native SDKs.
 
 ### What I did
-I owned every stage of production, end to end:
 
 - **Scripting** — wrote the walkthrough script and paced the narration to match what happens on screen.
 - **Voiceover** — turned the script into commentary with ElevenLabs text-to-speech.

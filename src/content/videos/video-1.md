@@ -9,7 +9,6 @@ tags: ['Feature', 'Tutorial']
 The video showcases a quick tutorial for the AI-powered sample data generation feature in dataforms within the Kissflow Apps module.
 
 ### What I did
-I owned every stage of production, end to end:
 
 - **Scripting** — wrote the tutorial script and paced the narration to match what happens on screen.
 - **Voiceover** — turned the script into commentary with ElevenLabs text-to-speech.
