@@ -11,7 +11,7 @@ tags: ['Documentation', 'Infosec']
 
 A selected set of admin and integration guides I wrote for PAM360, ManageEngine's privileged access management product. These walk enterprise admins through connecting PAM360 to hardware security modules, container platforms, and just-in-time access workflows — infrastructure-level configuration that needs to be precise enough to follow without engineering supervision.
 
-> **Note:** I wrote these docs from scratch, but I left ManageEngine 3 years ago. The live pages may have been revised since by other writers on the team, so the current versions may not fully match what I originally authored — if anything reads oddly or looks outdated, I can no longer vouch for or edit it. However, I will be able to walk you through my process of understanding these features and authoring these documents.
+**Note:** I documented these features from scratch, but I left ManageEngine 3 years ago. The live pages may have been revised since by other writers on the team, so the current versions may not fully match what I originally authored — if anything reads oddly or looks outdated, I can no longer vouch for or edit it. However, I will be able to walk you through my process of understanding these features and authoring these documents.
 
 * Connecting an Entrust nShield HSM to PAM360 for hardware-backed key storage: <a href="https://www.manageengine.com/privileged-access-management/help/entrust-nshield-hsm.html" target="_blank" rel="noopener noreferrer">Entrust HSM integration guide for PAM360</a>
 
