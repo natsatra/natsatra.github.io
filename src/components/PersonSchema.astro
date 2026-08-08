@@ -1,0 +1,25 @@
+---
+// src/components/PersonSchema.astro
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Your Name",
+  "url": "https://yourusername.github.io", // Your portfolio site URL
+  "jobTitle": "Technical Writer", // Or your preferred title
+  "sameAs": [
+    "https://github.com/yourusername",
+    "https://www.linkedin.com/in/yourusername",
+    "https://x.com/yourusername",
+    "https://dev.to/yourusername"
+  ],
+  "knowsAbout": [
+    "Technical Writing",
+    "Documentation",
+    "Information Security",
+    "Software Development"
+  ]
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
