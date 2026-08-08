@@ -5,6 +5,7 @@ import BaseHead, { type Props as HeadProps } from '../components/BaseHead.astro'
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import Nav from '../components/Nav.astro';
+import PersonSchema from '../components/PersonSchema.astro';
 
 export type Props = HeadProps & { showHeader?: boolean };
 
@@ -14,32 +15,8 @@ const { showHeader = true, ...head } = Astro.props;
 <!doctype html>
 <html lang="en" class="wrap-break-words antialiased">
     <head>
----
-// src/layouts/Layout.astro
-import PersonSchema from '../components/PersonSchema.astro';
-
-interface Props {
-  title: string;
-}
-
-const { title } = Astro.props;
----
-
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{title}</title>
-    
-    <!-- Inject Person JSON-LD Schema -->
-    <PersonSchema />
-  </head>
-  <body>
-    <slot />
-  </body>
-</html>
         <BaseHead {...head} />
+        <PersonSchema />
         <script is:inline>
     function applyDarkBackground() {
         document.documentElement.classList.add('dark');
