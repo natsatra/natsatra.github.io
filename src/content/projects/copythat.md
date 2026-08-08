@@ -36,7 +36,7 @@ Available on <a href="https://addons.mozilla.org/en-US/firefox/addon/copythat/" 
 - **Drag-and-drop reordering** of tabs in the sidebar.
 - **Bulk delete** — an edit mode with checkboxes, select-all, and a click-twice-to-confirm delete.
 - **Keyboard navigation** — up/down arrows cycle through tabs when the editor isn't focused; Tab moves focus from the title field into the editor.
-- **Live metadata** — character count against the limit, tab count, and an "Edited Xm ago" timestamp that refreshes while the popup is open.
+- **Live metadata** — character count against the limit, tab count, and an "Edited 5m ago" timestamp that refreshes while the popup is open.
 
 ### Why it's useful
 
@@ -55,7 +55,7 @@ The entire extension is three code files plus its icons:
 | `popup.js` | All logic — rendering, storage, clipboard, drag-and-drop |
 | `icon-16px.png`, `icon-48px.png`, `icon-128px.png` | Toolbar and extension-listing icons |
 
-There is **no background service worker, no content script, no options page, and no host permissions**. Code only executes while the popup is open, and only in the popup's own isolated document.
+The extension ships **no background service worker, no content script, no options page, and no host permissions**. Code only executes while the popup is open, and only in the popup's own isolated document.
 
 ### Storage model
 
@@ -78,7 +78,7 @@ Splitting each tab into its own key keeps every record well under the per-item q
 The deliberate headline decision: CopyThat uses `chrome.storage.local`, **not** `chrome.storage.sync`, and does not ask you to sign in to a Google (or any) account.
 
 - **No third-party custody.** With `storage.sync`, note contents would be uploaded to Google's servers and attached to your Google account. Snippets people keep in a tool like this — addresses, internal URLs, code — never leave the machine.
-- **No account linkage.** There is no identifier tying your notes to you. The extension has no concept of a user.
+- **No account linkage.** No identifier ties your notes to you. The extension has no concept of a user.
 - **Smaller attack surface.** No auth flow means no tokens to steal, no OAuth misconfiguration, no session to hijack.
 
 The trade-off is availability: notes don't follow you across devices, and there is no cloud backup (see [Limitations](#security-limitations)).
@@ -92,7 +92,7 @@ The manifest requests exactly two permissions:
 | `storage` | Persist notes in `chrome.storage.local` |
 | `clipboardWrite` | Required by Firefox for `navigator.clipboard.writeText()` from the popup |
 
-There are **no host permissions** (`<all_urls>`, `activeTab`, etc.), so the extension cannot read or modify any web page, and **no `clipboardRead`**, so it can write to your clipboard but never inspect what's on it.
+The manifest declares **no host permissions** (`<all_urls>`, `activeTab`, etc.), so the extension cannot read or modify any web page, and **no `clipboardRead`**, so it can write to your clipboard but never inspect what's on it.
 
 ### No network activity
 
@@ -110,7 +110,7 @@ Bulk deletion requires a second click within 2 seconds to confirm ("Click delete
 
 ### Zero dependencies at runtime
 
-The shipped extension is plain vanilla JavaScript. The only `devDependencies` are ESLint and type definitions — nothing from npm ends up in the package users install, which eliminates the supply-chain risk of a compromised runtime dependency.
+The shipped extension is plain vanilla JavaScript. The only `devDependencies` are ESLint and type definitions — nothing from npm ends up in the package users install, which eliminates the risk of a compromised dependency arriving through the supply chain.
 
 ---
 
@@ -120,8 +120,8 @@ Being honest about the boundaries matters as much as the protections. Known limi
 
 - **Data is not encrypted at rest.** `chrome.storage.local` is stored in plaintext (LevelDB) inside your browser profile. Anyone with access to your OS user account — or malware running as your user — can read it. The extension relies entirely on OS-level account security and full-disk encryption.
 - **Do not store secrets.** This is a notepad, not a password manager. Beyond the unencrypted storage, anything you *copy* lands on the system clipboard, which any focused application (and, on some platforms, background clipboard managers) can read. Passwords, API keys, and tokens don't belong here.
-- **No popup lock.** Anyone at your unlocked browser can open the popup and read every note. There is no PIN, password, or biometric gate.
-- **No backup or recovery.** The flip side of no-cloud: uninstalling the extension, clearing extension data, or losing the browser profile permanently destroys all notes. There is no export feature yet, and no undo after a confirmed bulk delete.
+- **No popup lock.** Anyone at your unlocked browser can open the popup and read every note. No PIN, password, or biometric gate stands in the way.
+- **No backup or recovery.** The flip side of no-cloud: uninstalling the extension, clearing extension data, or losing the browser profile permanently destroys all notes. No export feature exists yet, and a confirmed bulk delete cannot be undone.
 - **Tab characters aren't preserved.** The editor is a `contenteditable`, and tab-indented content may have its tabs converted to spaces when saved. Space-indented code (Python on 4 spaces, for example) round-trips reliably; if you keep tab-indented snippets here, check them after pasting.
 - **Storage quota.** Without the `unlimitedStorage` permission, `storage.local` is capped (~10 MB in Chrome, ~5 MB historically in Firefox). At 25,000 characters per tab and 20 tabs, normal use stays far below the cap, but hitting quota surfaces as a "storage limit reached" toast and the write is dropped.
 - **Trust is per-install.** As with any extension, these guarantees apply to the audited source in the <a href="https://github.com/natsatra/CopyThat" target="_blank" rel="noopener noreferrer">CopyThat repository</a>. The Firefox Add-ons build is reviewed and signed by Mozilla against that source; a Chromium copy you load unpacked is only as trustworthy as the checkout you loaded it from.

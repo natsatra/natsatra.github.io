@@ -76,3 +76,9 @@ regex(es)?
 unsanitized
 Outskill
 LLMs?
+contenteditable
+exfiltrated?
+misconfiguration
+namespaces?
+plaintext
+unencrypted
