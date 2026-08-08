@@ -13,8 +13,8 @@ const siteConfig: SiteConfig = {
     subtitle: 'Technical writer | User advocate | Developer docs | UX writing',
     description: 'Astro.js and Tailwind CSS theme for blog and portfolio by justgoodui.com',
     image: {
-        src: '/dante-preview.jpg',
-        alt: 'Dante - Astro.js and Tailwind CSS theme'
+        src: avatar,
+        alt: 'Mathangi S. — Technical Writer'
     },
     headerNavLinks: [
         {
