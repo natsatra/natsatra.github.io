@@ -11,7 +11,8 @@ const siteConfig: SiteConfig = {
     title: 'Mathangi | Technical Writer Portfolio',
     headerTitle: 'Mathangi S.',
     subtitle: 'Technical writer | User advocate | Developer docs | UX writing',
-    description: 'Astro.js and Tailwind CSS theme for blog and portfolio by justgoodui.com',
+    description:
+        'Mathangi S. is a senior technical writer in enterprise security and SaaS, writing developer docs and UX copy for software where confusion is expensive.',
     image: {
         src: avatar,
         alt: 'Mathangi S. — Technical Writer'
