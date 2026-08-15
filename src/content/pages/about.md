@@ -36,7 +36,7 @@ The tools I use across authoring, docs-as-code, API work, and content production
 
 #### 🗂️ Portfolio site
 
-My writing portfolio, built with <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a> as a docs-as-code demonstration — content in Markdown, version-controlled, deployed like software. I'm working on the final touches — come back later and there'll be more.
+My writing portfolio, built with <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a> as a docs-as-code demonstration — content in Markdown, version-controlled, uses Vale and Eslint to keep the prose and the code sharp, deployed like software.
 
 #### 📝 My projects
 
