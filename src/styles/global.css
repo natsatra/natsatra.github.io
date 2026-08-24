@@ -102,6 +102,21 @@ html.dark {
         margin: 0;
         vertical-align: middle;
     }
+
+    /* Image-only link (the Firefox Add-ons badge, which ships its own button
+       chrome). Overrides the dashed underline .prose a applies to text links. */
+    .prose a.amo-badge {
+        @apply inline-block no-underline transition-opacity;
+    }
+
+    .prose a.amo-badge:hover {
+        @apply opacity-80;
+    }
+
+    .prose a.amo-badge img {
+        display: block;
+        margin: 0;
+    }
 }
 /* Accent + background theme. Change --accent and --bg-gradient here to
    retheme the whole site; the tint/faint/soft shades are derived.

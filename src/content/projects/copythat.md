@@ -11,7 +11,15 @@ A tabbed notepad that lives in your browser toolbar. Store text and code snippet
 
 CopyThat is a Manifest V3 browser extension that runs entirely inside its own popup. It makes **no network requests**, injects **nothing into web pages**, and keeps all data **on your device**. What follows documents not just what the extension does, but the security decisions behind how it was built — and the limitations you should know about before trusting it with your text.
 
-Available on <a href="https://addons.mozilla.org/en-US/firefox/addon/copythat/" target="_blank" rel="noopener noreferrer">Firefox Add-ons</a> for Firefox 140+ on desktop and Firefox 142+ on Android. It also runs on Chrome and other Chromium-based browsers, loaded from source.
+Available on Firefox Add-ons for Firefox 140+ on desktop and Firefox 142+ on Android.
+
+<p>
+  <a class="amo-badge" href="https://addons.mozilla.org/en-US/firefox/addon/copythat/" target="_blank" rel="noopener noreferrer" aria-label="Get CopyThat on Firefox Add-ons">
+    <img src="/copythat/firefox.png" alt="Get CopyThat on Firefox Add-ons" width="129" height="45" decoding="async">
+  </a>
+</p>
+
+It also runs on Chrome and other Chromium-based browsers, loaded from source.
 
 <p align="center">
   <img src="/copythat/ct-1.png" alt="Preview of the CopyThat popup: colour-coded tabs in the sidebar, editor on the right" width="420">
