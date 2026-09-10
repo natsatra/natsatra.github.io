@@ -7,9 +7,11 @@ type: 'project'
 tags: ['Astro JS', 'CSS', 'Markdown']
 ---
 
+# Mathangi's portfolio — docs as code, demonstrated
+
 My technical writing portfolio, live at [natsatra.github.io](https://natsatra.github.io).
 
-This site is more than a list of work samples — it's a working demonstration of the docs-as-code workflow I use professionally. Every page is Markdown under version control, validated against a schema, linted for prose style, and shipped through CI. The repository itself is part of the portfolio.
+This site is more than a list of work samples — it's a working demonstration of the docs-as-code workflow I use professionally. Every page is Markdown under version control, validated against a schema, linted for prose style using Vale, and shipped through CI. The repository itself is part of my writing portfolio.
 
 ## How this demonstrates docs as code
 
@@ -28,16 +30,16 @@ Vale runs against `src/content/` using three style packages — [Google develope
 
 ### Tradeoffs for a first-person portfolio
 
-Style guides like Google's target product documentation. A portfolio is a different genre: it's personal, voice-forward, and first-person by design. Instead of working against the linter or abandoning it, `.vale.ini` documents deliberate exceptions:
+As a standard practice, style guides use Google's target product documentation. However, a portfolio is a different genre: it's personal and written in first-person by design. Instead of working against the linter or abandoning it, I have modified `.vale.ini` to document the exceptions:
 
-- **`Google.FirstPerson = NO`** — first-person voice is the point of a bio and project write-ups, not a defect.
-- **`Google.EmDash = NO` and `Google.Exclamation = NO`** — em dashes for asides and the occasional exclamation suit an informal register.
-- **Project vocabulary** — the vocabulary accepts terms like _Kissflow_, _OAuth_, _CLI_, and _agentic_ so the linter flags real issues instead of domain language.
+- **`Google.FirstPerson = NO`** — allows using first-person voice for the bio and project write-ups.
+- **`Google.EmDash = NO` and `Google.Exclamation = NO`** — allows use of em dashes for asides and the occasional exclamation mark for the informal register I'm going for.
+- **Project vocabulary** — the vocabulary accepts terms like _Kissflow_, _OAuth_, _CLI_, and _agentic_ so the linter doesn't flag them as incorrect.
 <!-- vale Google.WordList = NO -->
-- **Inline exemptions where rules misfire** — for example, an official CVE advisory title isn't mine to reword, and "get in touch" is an idiom, not a touchscreen instruction. Those spots carry scoped `<!-- vale ... = NO -->` comments with a note explaining why — including this bullet, which had to exempt itself to quote the idiom.
+- **Inline exemptions where rules misfire** — for example, an official CVE advisory title cannot be reworded to suit the linter's rules. For exceptions like those, there are scoped comments `<!-- vale ... = NO -->` with a note explaining why.
 <!-- vale Google.WordList = YES -->
 
-The goal is a linter that catches genuine problems — passive voice, inconsistent capitalization, ableist phrasing — without flattening the writing into product-doc neutrality. Knowing _when to deviate_ from a style guide, and documenting the deviation, is itself a technical writing skill — one this repo sets out to show.
+The goal for the Vale linter is to catch genuine problems — passive voice, inconsistent capitalization, ableist phrasing — without flattening the writing into product-doc neutrality. Knowing _when to deviate_ from a style guide, and documenting the deviation, is itself a technical writing skill.
 
 ## CI workflow
 
@@ -48,25 +50,21 @@ The goal is a linter that catches genuine problems — passive voice, inconsiste
 3. **`bun run build`** — full Astro build, which also validates every content entry against its collection schema.
 4. **Vale via [vale-cli/vale-action](https://github.com/vale-cli/vale-action)** — prose check on `src/content/`, reported through reviewdog as GitHub check annotations.
 
-One nuance worth calling out: reviewdog's `github-check` reporter fails the run if it reports _any_ finding, regardless of severity, and GitHub caps annotations per step. That's why CI runs Vale at `--minAlertLevel=error` — errors block the merge, while the full warning-level feedback stays available locally via `bun run lint:prose`, where it's actually actionable.
-
 ## Code linting and formatting
 
-- **ESLint** (`eslint.config.mjs`) — flat config combining `@eslint/js` recommended, `typescript-eslint` recommended, and `eslint-plugin-astro`, with `eslint-config-prettier` last so formatting stays Prettier's job. `no-undef` is off because TypeScript already checks references (and understands Astro's ambient types).
+- **ESLint** (`eslint.config.mjs`) — flat config combining `@eslint/js` recommended, `typescript-eslint` recommended, and `eslint-plugin-astro`, with `eslint-config-prettier` last so Prettier takes care of the formatting.
+- `no-undef` is off because TypeScript already checks references (and understands Astro's ambient types).
 - **Prettier** (`.prettierrc`) — single quotes, 160-character lines, 4-space indent (2 for Markdown and YAML), with `prettier-plugin-astro` for `.astro` files and `prettier-plugin-tailwindcss` for class sorting.
 
 ## Docs for machine readers: llms.txt
 
-The site ships an [`llms.txt`](/llms.txt) at the root, following the [llms.txt proposal](https://llmstxt.org/). AI assistants and agents are now a real audience for any published site, and they read it badly by default — HTML arrives wrapped in navigation, scripts, and markup that waste context-window tokens and bury the content. `llms.txt` is the fix — a curated Markdown map at a predictable path that tells a machine reader what the site is and where the canonical content lives, in a format it can consume directly.
+The site carries an [`llms.txt`](public/llms.txt) at the root, following the [llms.txt proposal](https://llmstxt.org/). I wanted to include it since AI assistants and agents are now a real audience for any published site. An llms.txt file can provide some direction to the agents by providing curated map at the site's root that tells a machine reader what the site is and where the canonical content lives, in a format they can consume directly.
 
 Here it contains:
 
 - A one-line identity and a summary of the portfolio's focus areas
 - Annotated links to every page, writing sample, and video — each with a description of what the reader finds there
 - Contact details
-- An honest scope note flagging which sections are still placeholder content, so an AI summarizing the portfolio doesn't present drafts as finished work
-
-For a technical writer, this is audience analysis applied to a new audience: the same discipline as writing for developers or admins, extended to readers that parse Markdown and count tokens.
 
 ## Installation
 
