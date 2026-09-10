@@ -7,7 +7,7 @@ type: 'project'
 tags: ['Astro JS', 'CSS', 'Markdown']
 ---
 
-# Mathangi's portfolio — docs as code, demonstrated
+## Mathangi's portfolio — docs as code, demonstrated
 
 My technical writing portfolio, live at [natsatra.github.io](https://natsatra.github.io).
 
