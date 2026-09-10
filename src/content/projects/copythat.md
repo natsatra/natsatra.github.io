@@ -9,7 +9,7 @@ tags: ['JavaScript', 'HTML', 'Browser extension']
 
 A tabbed notepad that lives in your browser toolbar. Store text and code snippets in colour-coded tabs, and copy any tab's contents to the clipboard with one click.
 
-CopyThat is a Manifest V3 browser extension that runs entirely inside its own popup. It makes **no network requests**, injects **nothing into web pages**, and keeps all data **on your device**. What follows documents not just what the extension does, but the security decisions behind how it was built — and the limitations you should know about before trusting it with your text.
+CopyThat is a Manifest V3 browser extension that runs entirely inside its own popup. It makes **no network requests**, injects **nothing into web pages**, and keeps all data **on your device**, in local storage. This readme documents what the extension does, the security decisions behind how it was built, and the limitations you should know about before trusting it with your text.
 
 Available on Firefox Add-ons for Firefox 140+ on desktop and Firefox 142+ on Android.
 
@@ -19,7 +19,7 @@ Available on Firefox Add-ons for Firefox 140+ on desktop and Firefox 142+ on And
   </a>
 </p>
 
-It also runs on Chrome and other Chromium-based browsers, loaded from source.
+It also runs on Chrome and other Chromium-based browsers, when you manually load the manifest.json file.
 
 <p align="center">
   <img src="/copythat/ct-1.png" alt="Preview of the CopyThat popup: colour-coded tabs in the sidebar, editor on the right" width="420">
@@ -44,7 +44,7 @@ It also runs on Chrome and other Chromium-based browsers, loaded from source.
 - **Drag-and-drop reordering** of tabs in the sidebar.
 - **Bulk delete** — an edit mode with checkboxes, select-all, and a click-twice-to-confirm delete.
 - **Keyboard navigation** — up/down arrows cycle through tabs when the editor isn't focused; Tab moves focus from the title field into the editor.
-- **Live metadata** — character count against the limit, tab count, and an "Edited 5m ago" timestamp that refreshes while the popup is open.
+- **Live metadata** — character count against the limit, tab count, and a timestamp to tell when a tab was last edited; it refreshes while the popup is open.
 
 ### Why it's useful
 
@@ -75,7 +75,7 @@ Notes are persisted in `chrome.storage.local` (via `browser.storage.local` on Fi
 | `myExtensionActiveId` | ID of the currently active tab |
 | `tab_<id>` | One record per tab: `{ id, title, content, color, updatedAt }` |
 
-Splitting each tab into its own key keeps every record well under the per-item quota and means a write failure on one tab can't corrupt the rest. Writes are debounced (400 ms) and quota errors surface as a visible toast rather than failing silently. A migration path from the older single-key format runs automatically on first load.
+Splitting each tab into its own key keeps every record well under the per-item quota and means a write failure on one tab can't corrupt the rest. Writes are debounced (400 ms) and quota errors surface as a visible toast rather than failing silently.
 
 ---
 
@@ -83,7 +83,7 @@ Splitting each tab into its own key keeps every record well under the per-item q
 
 ### Local storage only — no account sign-in, no sync
 
-The deliberate headline decision: CopyThat uses `chrome.storage.local`, **not** `chrome.storage.sync`, and does not ask you to sign in to a Google (or any) account.
+CopyThat uses `chrome.storage.local`, **not** `chrome.storage.sync`, and does not ask you to sign in to a Google (or any) account.
 
 - **No third-party custody.** With `storage.sync`, note contents would be uploaded to Google's servers and attached to your Google account. Snippets people keep in a tool like this — addresses, internal URLs, code — never leave the machine.
 - **No account linkage.** No identifier ties your notes to you. The extension has no concept of a user.
@@ -91,7 +91,7 @@ The deliberate headline decision: CopyThat uses `chrome.storage.local`, **not** 
 
 The trade-off is availability: notes don't follow you across devices, and there is no cloud backup (see [Limitations](#security-limitations)).
 
-### Minimal, silent permissions
+### Minimal permissions
 
 The manifest requests exactly two permissions:
 
@@ -110,11 +110,11 @@ The manifest declares **no host permissions** (`<all_urls>`, `activeTab`, etc.),
 
 All user-controlled text — note contents, tab titles — enters the DOM through safe sinks only: `textContent`, `innerText`, and `document.createTextNode()`. An audit for unsafe sinks (`innerHTML`, `outerHTML`, `insertAdjacentHTML`) finds a single `innerHTML` occurrence, and it writes a constant (clearing a stray `<br>` from the contenteditable editor) — never user data.
 
-Pasting is also sanitised: the paste handler intercepts the event and inserts only the `text/plain` representation, so HTML riding along in the clipboard is discarded rather than interpreted.
+Pasting is also sanitized: the paste handler intercepts the event and inserts only the `text/plain` representation, so HTML riding along in the clipboard is discarded.
 
 ### Guarded destructive actions
 
-Bulk deletion requires a second click within 2 seconds to confirm ("Click delete again to confirm"), and deleting every tab regenerates a starter tab rather than leaving the extension in a broken empty state.
+Bulk deletion requires a second click within 2 seconds to confirm ("Click delete again to confirm"), and deleting every tab regenerates a starter tab.
 
 ### Zero dependencies at runtime
 
@@ -124,12 +124,12 @@ The shipped extension is plain vanilla JavaScript. The only `devDependencies` ar
 
 ## Security limitations
 
-Being honest about the boundaries matters as much as the protections. Known limitations:
+Here are some known limitations:
 
 - **Data is not encrypted at rest.** `chrome.storage.local` is stored in plaintext (LevelDB) inside your browser profile. Anyone with access to your OS user account — or malware running as your user — can read it. The extension relies entirely on OS-level account security and full-disk encryption.
 - **Do not store secrets.** This is a notepad, not a password manager. Beyond the unencrypted storage, anything you *copy* lands on the system clipboard, which any focused application (and, on some platforms, background clipboard managers) can read. Passwords, API keys, and tokens don't belong here.
 - **No popup lock.** Anyone at your unlocked browser can open the popup and read every note. No PIN, password, or biometric gate stands in the way.
-- **No backup or recovery.** The flip side of no-cloud: uninstalling the extension, clearing extension data, or losing the browser profile permanently destroys all notes. No export feature exists yet, and a confirmed bulk delete cannot be undone.
+- **No backup or recovery.** The flip side of no-cloud: uninstalling the extension, clearing extension data, or losing the browser profile permanently destroys all notes. There is no export feature as yet, and a confirmed bulk delete cannot be undone.
 - **Tab characters aren't preserved.** The editor is a `contenteditable`, and tab-indented content may have its tabs converted to spaces when saved. Space-indented code (Python on 4 spaces, for example) round-trips reliably; if you keep tab-indented snippets here, check them after pasting.
 - **Storage quota.** Without the `unlimitedStorage` permission, `storage.local` is capped (~10 MB in Chrome, ~5 MB historically in Firefox). At 25,000 characters per tab and 20 tabs, normal use stays far below the cap, but hitting quota surfaces as a "storage limit reached" toast and the write is dropped.
 - **Trust is per-install.** As with any extension, these guarantees apply to the audited source in the <a href="https://github.com/natsatra/CopyThat" target="_blank" rel="noopener noreferrer">CopyThat repository</a>. The Firefox Add-ons build is reviewed and signed by Mozilla against that source; a Chromium copy you load unpacked is only as trustworthy as the checkout you loaded it from.
@@ -140,9 +140,9 @@ Being honest about the boundaries matters as much as the protections. Known limi
 
 On Firefox, CopyThat is <a href="https://addons.mozilla.org/en-US/firefox/addon/copythat/" target="_blank" rel="noopener noreferrer">published on Firefox Add-ons</a> — a permanent, Mozilla-signed install on desktop and on Android, where it works the same as it does on desktop.
 
-It isn't on the Chrome Web Store, so Chromium users load it unpacked: clone <a href="https://github.com/natsatra/CopyThat" target="_blank" rel="noopener noreferrer">the repository</a>, open `chrome://extensions`, enable **Developer mode**, and click **Load unpacked**.
+It isn't on the Chrome Web Store yet, but Chromium users can load it unpacked: clone <a href="https://github.com/natsatra/CopyThat" target="_blank" rel="noopener noreferrer">the repository</a>, open `chrome://extensions`, enable **Developer mode**, and click **Load unpacked**.
 
-Either way there is no build step — the extension runs directly from source, which also makes auditing it trivial: read the three files listed under [Architecture](#architecture) and you've read everything that executes.
+Either way there is no build step — the extension runs directly from source, which also makes auditing it simple: read the three files listed under [Architecture](#architecture) and you've read everything that executes.
 
 ## Development
 
