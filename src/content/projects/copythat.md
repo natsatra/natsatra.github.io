@@ -14,7 +14,7 @@ CopyThat is a Manifest V3 browser extension that runs entirely inside its own po
 Available on Firefox Add-ons for Firefox 140+ on desktop and Firefox 142+ on Android.
 
 <p>
-  <a class="amo-badge" href="https://addons.mozilla.org/en-US/firefox/addon/copythat/" target="_blank" rel="noopener noreferrer" aria-label="Get CopyThat on Firefox Add-ons">
+  <a class="amo-badge" href="https://addons.mozilla.org/en-US/firefox/addon/copythat/?utm_source=folio" target="_blank" rel="noopener noreferrer" aria-label="Get CopyThat on Firefox Add-ons">
     <img src="/copythat/firefox.png" alt="Get CopyThat on Firefox Add-ons" width="129" height="45" decoding="async">
   </a>
 </p>
