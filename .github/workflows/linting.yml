@@ -14,12 +14,17 @@ jobs:
         - run: bun install
         - run: bun run lint
         - run: bun run build
+        # Prose is advisory: reviewdog's github-check reporter exits 1 on ANY
+        # finding and fail_on_error can't override it, so continue-on-error
+        # keeps a stale vocab entry from failing the whole workflow. Findings
+        # still appear as a check. ESLint and the build above stay blocking.
         - uses: vale-cli/vale-action@v2
+          continue-on-error: true
           with:
             files: "src/content"
             fail_on_error: "false"
             reporter: "github-check"
-            # reviewdog's github-check reporter exits 1 on ANY finding
-            # (fail_on_error can't override it), so only surface errors in CI;
-            # warnings still show when running vale locally.
+            # Only surface errors in CI; warnings still show when running vale
+            # locally. Rules that ship as `level: error` but are stylistic for
+            # this site are downgraded to warnings in .vale.ini.
             vale_flags: "--minAlertLevel=error"

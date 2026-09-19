@@ -82,3 +82,7 @@ misconfiguration
 namespaces?
 plaintext
 unencrypted
+Ephem
+automatable
+[Rr]eadme
+[Ll]inters?('s)?
